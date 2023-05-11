@@ -25,7 +25,7 @@ const LoginForm = (props: any) => {
 			const { data } = await LoginApi(loginForm);
 			setToken(data);
 			setTabsList([]);
-			message.success("登录成功！");
+			message.success(t("login.loginSuccess"));
 			navigate(HOME_URL);
 		} finally {
 			setLoading(false);
@@ -47,11 +47,11 @@ const LoginForm = (props: any) => {
 			size="large"
 			autoComplete="off"
 		>
-			<Form.Item name="userId" rules={[{ required: true, message: "请输入用户名" }]}>
-				<Input placeholder="用户名：admin / user" prefix={<UserOutlined />} />
+			<Form.Item name="userId" rules={[{ required: true, message: t("input.userId") }]}>
+				<Input placeholder="user Id：admin / user" prefix={<UserOutlined />} />
 			</Form.Item>
-			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
-				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined />} />
+			<Form.Item name="password" rules={[{ required: true, message: t("input.pwd") }]}>
+				<Input.Password autoComplete="new-password" placeholder="password：123456" prefix={<LockOutlined />} />
 			</Form.Item>
 			<Form.Item className="login-btn">
 				<Button

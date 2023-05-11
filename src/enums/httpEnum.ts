@@ -4,6 +4,7 @@
  */
 export enum ResultEnum {
 	SUCCESS = 200,
+	AuthenticationTimeout = 419,
 	ERROR = 500,
 	OVERDUE = 599,
 	UnAuthorization = 1401,

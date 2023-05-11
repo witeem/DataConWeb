@@ -13,7 +13,8 @@ i18n.use(initReactI18next).init({
 		}
 	},
 	// 选择默认语言，选择内容为上述配置中的 key，即 en/zh
-	fallbackLng: "zh",
+	fallbackLng: "en",
+	lng: "en",
 	debug: false,
 	interpolation: {
 		escapeValue: false // not needed for react as it escapes by default

@@ -83,6 +83,8 @@ const LayoutMenu = (props: any) => {
 			const dynamicRouter = handleRouter(data);
 			setAuthRouter(dynamicRouter);
 			setMenuListAction(data);
+		} catch (error) {
+			console.log(error);
 		} finally {
 			setLoading(false);
 		}
@@ -104,7 +106,7 @@ const LayoutMenu = (props: any) => {
 			<Spin spinning={loading} tip="Loading...">
 				<Logo></Logo>
 				<Menu
-					// theme="dark"
+					theme="dark"
 					mode="inline"
 					triggerSubMenuAction="click"
 					openKeys={openKeys}

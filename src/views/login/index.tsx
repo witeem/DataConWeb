@@ -4,8 +4,11 @@ import loginLeft from "@/assets/images/login_left.png";
 import logo from "@/assets/images/logo.png";
 import "./index.less";
 import { SysTitle } from "@/config/config";
+import { setToken } from "@/redux/modules/global/action";
+import { store } from "@/redux";
 
 const Login = () => {
+	store.dispatch(setToken(""));
 	return (
 		<div className="login-container">
 			<SwitchDark />
