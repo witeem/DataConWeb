@@ -1,6 +1,6 @@
-# MarketingSuite360_FE
+# DataConWeb
 
-This is the front-end project for MarketingSuite360
+Use react+vite+typescript+axios to manage common side projects
 
 ### Technical Support
 
