@@ -11,10 +11,14 @@ interface TableParams {
 
 export type TbParams = TableParams;
 
-const GetRandomuserParams = (params: TableParams) => ({
+export const GetRandomuserParams = (params: any) => ({
 	pageSize: params.pagination?.pageSize,
 	pageIndex: params.pagination?.current,
-	keyword: params.keyword
+	keyword: params.keyword,
+	...params
 });
 
-export default GetRandomuserParams;
+export const GetAddmMenuReq = (params: any) => ({
+	title: params.title,
+	...params
+});

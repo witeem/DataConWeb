@@ -25,7 +25,8 @@ const service = axios.create({
 const RefreshToken = async () => {
 	try {
 		const { data } = await RefreshTokenApi();
-		store.dispatch(setToken(data?.data || ""));
+		console.log("refreshToken", data);
+		setToken(data?.data || "");
 	} catch (ex: any) {
 		window.location.hash = "/login";
 		return Promise.reject(ex);
@@ -98,7 +99,12 @@ const requestHandler = <T>(
 						store.dispatch(setToken(""));
 						message.error(error.message);
 						window.location.hash = "/login";
-						return Promise.reject(error);
+						return reject(error);
+					}
+
+					case 500: {
+						message.error(error.message);
+						return reject(error);
 					}
 
 					case ResultEnum.AuthenticationTimeout: {
@@ -107,10 +113,10 @@ const requestHandler = <T>(
 					}
 				}
 
-				let e = JSON.stringify(error);
-				message.warn(`network error ${e}`);
-				console.log(`network error ${e}`);
-				reject(error);
+				// let e = JSON.stringify(error);
+				// message.warn(`network error ${e}`);
+				// console.log(`network error ${e}`);
+				// reject(error);
 			});
 	});
 };

@@ -27,6 +27,8 @@ const LoginForm = (props: any) => {
 			setTabsList([]);
 			message.success(t("login.loginSuccess"));
 			navigate(HOME_URL);
+		} catch (err: any) {
+			console.log(err.message);
 		} finally {
 			setLoading(false);
 		}

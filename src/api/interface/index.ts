@@ -2,6 +2,7 @@
 export interface Result {
 	code: number;
 	msg: string;
+	success: boolean;
 }
 
 // * 分页请求参数

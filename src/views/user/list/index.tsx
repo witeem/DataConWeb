@@ -1,98 +1,64 @@
-import { useEffect, useRef, useState } from "react";
-import { Table, Input, Button, Space, Row, Col } from "antd";
-// import useAuthButtons from "@/hooks/useAuthButtons";
-import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import type { FilterValue, SorterResult } from "antd/es/table/interface";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useRef, useState } from "react";
+import { Button } from "antd";
 import type { TableListItem } from "./data";
 import { GetUserPageApi } from "@/api/modules/userinfo";
-import GetRandomuserParams from "@/views/interface/index";
-import type { TbParams } from "@/views/interface/index";
+import { GetRandomuserParams } from "@/views/interface/index";
 import Addform from "@/views/user/components/addform";
 import Updateform from "../components/updateform";
-import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { PageContainer } from "@ant-design/pro-layout";
+import ProTable from "@ant-design/pro-table";
+import { PlusOutlined } from "@ant-design/icons";
+import type { ProColumns, ActionType } from "@ant-design/pro-table";
+import type { TableListPagination } from "@/views/components/tablelist";
 
 import "./index.less";
-import "@/views/table-list.less";
+
+/** 获取规则列表 GET /api/rule */
+export async function requestData(
+	params: {
+		// query
+		/** 当前的页码 */
+		current?: number;
+		/** 页面的容量 */
+		pageSize?: number;
+	},
+	options?: { [key: string]: any }
+) {
+	return await GetUserPageApi(GetRandomuserParams(params));
+}
+
+interface ModalProps {
+	ShowModal: () => void;
+}
+
+interface ColumnProps {
+	ShowModal: (params: TableListItem) => void;
+}
 
 const UserList: React.FC = () => {
-	interface ModalProps {
-		ShowModal: () => void;
-	}
-
-	interface ColumnProps {
-		ShowModal: (params: TableListItem) => void;
-	}
-
 	const { t } = useTranslation();
 	const updateRef = useRef<ColumnProps>(null);
 	const addRef = useRef<ModalProps>(null);
+	const actionRef = useRef<ActionType>();
 
-	// 按钮权限
-	// const { BUTTONS } = useAuthButtons();
 	const [userIdvalue, setUserIdvalue] = useState("");
 	const [data, setData] = useState<TableListItem[]>();
 	const [loading, setLoading] = useState(false);
-	const [tableParams, setTableParams] = useState<TbParams>({
-		pagination: {
-			current: 1,
-			pageSize: 10
-		},
-		filters: {}
+	const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
+	const [tableParams, setTableParams] = useState<TableListPagination>({
+		current: 1,
+		pageSize: 20
 	});
 
-	const FetchData = async () => {
-		setLoading(true);
-		try {
-			let dataRes = await GetUserPageApi(GetRandomuserParams(tableParams));
-			if (dataRes?.success) {
-				setData(dataRes?.data);
-				setTableParams({
-					...tableParams,
-					pagination: {
-						...tableParams.pagination
-						// total: dataRes.total
-						// 200 is mock data, you should read it from server
-						// total: data.totalCount,
-					}
-				});
-			}
-		} catch (error: any) {
-			message.error(error.message);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const HandleTableChange = (
-		pagination: TablePaginationConfig,
-		filters: Record<string, FilterValue | null>,
-		sorter: SorterResult<TableListItem> | SorterResult<TableListItem>[]
-	) => {
-		setTableParams({
-			pagination,
-			filters,
-			...sorter
-		});
-
-		// `dataSource` is useless since `pageSize` changed
-		if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-			setData([]);
-		}
-	};
-
-	useEffect(() => {
-		FetchData();
-	}, [JSON.stringify(tableParams)]);
-
-	const columns: ColumnsType<TableListItem> = [
+	const columns: ProColumns<TableListItem>[] = [
 		{
 			title: t("userColumn.userId"),
 			width: 120,
 			dataIndex: "userId",
-			key: "userId",
-			align: "center",
-			fixed: "left"
+			key: "keyword",
+			align: "center"
 		},
 		{
 			title: t("userColumn.userName"),
@@ -116,7 +82,8 @@ const UserList: React.FC = () => {
 		},
 		{
 			title: t("opt.opt"),
-			key: "operation",
+			dataIndex: "option",
+			valueType: "option",
 			fixed: "right",
 			width: 120,
 			render: (_, record) => [
@@ -132,10 +99,6 @@ const UserList: React.FC = () => {
 		}
 	];
 
-	const SearchBtn = async () => {
-		setTableParams({ ...tableParams, pagination: { ...tableParams.pagination }, keyword: userIdvalue });
-	};
-
 	const CreateBtn = async () => {
 		addRef.current!.ShowModal();
 	};
@@ -148,61 +111,33 @@ const UserList: React.FC = () => {
 		<div className="card content-box">
 			<Addform innerRef={addRef} />
 			<Updateform innerRef={updateRef} />
-			<Row gutter={[16, 24]}>
-				<Col className="gutter-row" span={6}>
-					<Space align="center">
-						<span>{t("userColumn.userId")} ：</span>
-						<Input
-							value={userIdvalue}
-							onChange={e => {
-								setUserIdvalue(e.target.value);
+			<PageContainer>
+				<ProTable<TableListItem, TableListPagination>
+					headerTitle={t("userColumn.userlist")}
+					bordered={true}
+					params={tableParams}
+					request={requestData}
+					actionRef={actionRef}
+					columns={columns}
+					rowKey={record => record.userId}
+					toolBarRender={() => [
+						<Button
+							type="primary"
+							key="primary"
+							onClick={() => {
+								CreateBtn();
 							}}
-						/>
-					</Space>
-				</Col>
-				<Col className="gutter-row" span={6}>
-					<Space align="center">
-						<span>{t("userColumn.userName")} ：</span>
-						<Input />
-					</Space>
-				</Col>
-			</Row>
-			<Row justify="end" className="table-spance">
-				<Col>
-					<Button type="primary" onClick={SearchBtn}>
-						{t("opt.search")}
-					</Button>
-					&nbsp;
-					<Button type="primary" onClick={CreateBtn}>
-						{t("opt.create")}
-					</Button>
-				</Col>
-			</Row>
-			{/* <div className="auth">
-				<Space>
-					{BUTTONS.add && <Button type="primary">我是 Admin && User 能看到的按钮</Button>}
-					{BUTTONS.delete && <Button type="primary">我是 Admin 能看到的按钮</Button>}
-					{BUTTONS.edit && <Button type="primary">我是 User 能看到的按钮</Button>}
-				</Space>
-			</div> */}
-			<div className="table-spance"></div>
-			<Table
-				bordered={true}
-				dataSource={data}
-				columns={columns}
-				rowKey={record => record.userId}
-				pagination={
-					(tableParams.pagination,
-					{
-						showSizeChanger: true,
-						showQuickJumper: true,
-						total: data?.length,
-						showTotal: total => `Total ${total} items`
-					})
-				}
-				loading={loading}
-				onChange={HandleTableChange}
-			/>
+						>
+							<PlusOutlined /> {t("opt.create")}
+						</Button>
+					]}
+					rowSelection={{
+						onChange: (_, selectedRows) => {
+							setSelectedRows(selectedRows);
+						}
+					}}
+				/>
+			</PageContainer>
 		</div>
 	);
 };

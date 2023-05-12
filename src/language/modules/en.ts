@@ -7,6 +7,9 @@ export default {
 	home: {
 		welcome: "Welcome"
 	},
+	router: {
+		createMenu: "Create Menu"
+	},
 	opt: {
 		opt: "operation",
 		search: "search",
@@ -14,7 +17,8 @@ export default {
 		update: "update",
 		cancel: "cancel",
 		del: "delete",
-		read: "read"
+		read: "read",
+		reset: "reset"
 	},
 	tabs: {
 		more: "More",
@@ -40,6 +44,7 @@ export default {
 		pwd: "Please Enter Password"
 	},
 	userColumn: {
+		userlist: "User Table",
 		userId: "user Id",
 		userName: "user Name",
 		emailAdd: "email Address",
@@ -50,6 +55,7 @@ export default {
 		updateUser: "update User"
 	},
 	roleColumn: {
+		rolelist: "Role Table",
 		roleName: "role Name",
 		desc: "description",
 		authScope: "authorityScope",
