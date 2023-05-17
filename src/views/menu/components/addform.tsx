@@ -35,6 +35,8 @@ const MenuBasicForm: React.FC<Record<string, any>> = () => {
 					form.resetFields();
 					message.success("Create Success");
 					menuBarRef.current!.UpdateMenuTree();
+				} else {
+					message.error(res.msg);
 				}
 			}
 		} finally {

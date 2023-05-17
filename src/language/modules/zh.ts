@@ -18,7 +18,10 @@ export default {
 		cancel: "取消",
 		del: "删除",
 		read: "查看",
-		reset: "重置"
+		reset: "重置",
+		profile: "角色配置",
+		setrole: "权限配置",
+		submit: "提交"
 	},
 	tabs: {
 		more: "更多",

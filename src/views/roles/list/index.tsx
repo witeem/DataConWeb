@@ -15,6 +15,7 @@ import type { ProColumns, ActionType } from "@ant-design/pro-table";
 import type { TableListPagination } from "@/views/components/tablelist";
 
 import "./index.less";
+import SetRoleForm from "../components/setroleform";
 
 /** 获取规则列表 GET /api/rule */
 export async function requestData(
@@ -41,6 +42,7 @@ const RoleList: React.FC = () => {
 
 	// 按钮权限
 	const { t } = useTranslation();
+	const setroleRef = useRef<ColumnProps>(null);
 	const updateRef = useRef<ColumnProps>(null);
 	const addRef = useRef<ModalProps>(null);
 
@@ -55,7 +57,7 @@ const RoleList: React.FC = () => {
 		{
 			title: t("roleColumn.roleName"),
 			dataIndex: "roleName",
-			key: "keyword",
+			key: "roleName",
 			width: 120,
 			align: "center"
 		},
@@ -63,12 +65,6 @@ const RoleList: React.FC = () => {
 			title: t("roleColumn.desc"),
 			dataIndex: "description",
 			key: "description",
-			align: "center"
-		},
-		{
-			title: t("roleColumn.authScope"),
-			dataIndex: "authorityScope",
-			sorter: true,
 			search: false,
 			align: "center"
 		},
@@ -78,8 +74,8 @@ const RoleList: React.FC = () => {
 			key: "active",
 			align: "center",
 			valueEnum: {
-				1: { text: "活跃", status: "Success" },
-				0: { text: "禁用", status: "Error" }
+				true: { text: "活跃", status: "Success" },
+				false: { text: "禁用", status: "Error" }
 			},
 			width: "50%"
 		},
@@ -97,6 +93,14 @@ const RoleList: React.FC = () => {
 					}}
 				>
 					{t("opt.update")}
+				</a>,
+				<a
+					key="setrole"
+					onClick={() => {
+						SetRoleBtn(record);
+					}}
+				>
+					{t("opt.setrole")}
 				</a>
 			]
 		}
@@ -110,10 +114,15 @@ const RoleList: React.FC = () => {
 		updateRef.current!.ShowModal(params);
 	};
 
+	const SetRoleBtn = async (params: TableListItem) => {
+		setroleRef.current!.ShowModal(params);
+	};
+
 	return (
 		<div className="card content-box">
 			<Addform innerRef={addRef} />
 			<Updateform innerRef={updateRef} />
+			<SetRoleForm innerRef={setroleRef} />
 			<PageContainer>
 				<ProTable<TableListItem, TableListPagination>
 					headerTitle={t("roleColumn.rolelist")}

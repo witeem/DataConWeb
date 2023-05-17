@@ -8,24 +8,28 @@ import { request } from "@/api";
  * @name Login module
  */
 // * User login interface
+export const RegisterApi = (params: any) => {
+	return request.post<string>(PORT1 + `/Account/Register`, params);
+	return request.post<string>(PORT1 + `/Account/Register`, {}, { params });
+	return request.post<string>(PORT1 + `/Account/Register`, qs.stringify(params));
+};
+
 export const LoginApi = (params: Login.ReqLoginForm) => {
-	return request.post<Login.ResLogin>(PORT1 + `/Account/Login`, params);
-	return request.post<Login.ResLogin>(PORT1 + `/Account/Login`, {}, { params });
-	return request.post<Login.ResLogin>(PORT1 + `/Account/Login`, qs.stringify(params));
+	return request.post<string>(PORT1 + `/Account/Login`, params);
+	return request.post<string>(PORT1 + `/Account/Login`, {}, { params });
+	return request.post<string>(PORT1 + `/Account/Login`, qs.stringify(params));
 };
 
 // * Refreshing token interface
 export const RefreshTokenApi = () => {
-	return request.post<Login.ResLogin>(PORT1 + `/Account/RefreshToken`);
-	return request.post<Login.ResLogin>(PORT1 + `/Account/RefreshToken`, {}, {});
-	return request.post<Login.ResLogin>(PORT1 + `/Account/RefreshToken`, qs.stringify());
+	return request.post<string>(PORT1 + `/Account/RefreshToken`);
+	return request.post<string>(PORT1 + `/Account/RefreshToken`, {}, {});
+	return request.post<string>(PORT1 + `/Account/RefreshToken`, qs.stringify());
 };
 
 // * User logout interface
-export const LogoutApi = (params: Login.ReqLoginForm) => {
-	return request.post<boolean>(PORT1 + `/Account/Logout`, params);
-	return request.post<boolean>(PORT1 + `/Account/Logout`, {}, { params });
-	return request.post<boolean>(PORT1 + `/Account/Logout`, qs.stringify(params));
+export const LogoutApi = () => {
+	return request.post<boolean>(PORT1 + `/Account/Logout`);
 };
 
 // * Interface for users to change passwords

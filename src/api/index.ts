@@ -26,7 +26,7 @@ const RefreshToken = async () => {
 	try {
 		const { data } = await RefreshTokenApi();
 		console.log("refreshToken", data);
-		setToken(data?.data || "");
+		setToken(data);
 	} catch (ex: any) {
 		window.location.hash = "/login";
 		return Promise.reject(ex);
@@ -46,7 +46,6 @@ service.interceptors.request.use(
 		return { ...config, headers: { ...config.headers, "x-access-token": token } };
 	},
 	error => {
-		console.log(error);
 		Promise.reject(error);
 	}
 );
@@ -97,13 +96,15 @@ const requestHandler = <T>(
 				switch (error.response?.status) {
 					case 401: {
 						store.dispatch(setToken(""));
-						message.error(error.message);
 						window.location.hash = "/login";
 						return reject(error);
 					}
 
+					case 404: {
+						return reject(error);
+					}
+
 					case 500: {
-						message.error(error.message);
 						return reject(error);
 					}
 

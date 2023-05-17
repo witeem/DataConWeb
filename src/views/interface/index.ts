@@ -18,6 +18,23 @@ export const GetRandomuserParams = (params: any) => ({
 	...params
 });
 
+export const GetInsertRoleReq = (params: any) => ({
+	active: params.active,
+	...params
+});
+
+export const GetRegisterReq = (params: any) => ({
+	...params,
+	isReceiveEmail: params.isReceiveEmail === true ? 1 : 0,
+	isReceiveEODMail: params.isReceiveEODMail === true ? 1 : 0
+});
+
+export const GetUserUpdateReq = (params: any) => ({
+	...params,
+	isReceiveEmail: params.isReceiveEmail === true ? 1 : 0,
+	isReceiveEODMail: params.isReceiveEODMail === true ? 1 : 0
+});
+
 export const GetAddmMenuReq = (params: any) => ({
 	title: params.title,
 	...params

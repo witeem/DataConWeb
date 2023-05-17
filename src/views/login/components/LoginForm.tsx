@@ -23,6 +23,7 @@ const LoginForm = (props: any) => {
 			setLoading(true);
 			// loginForm.password = md5(loginForm.password);
 			const { data } = await LoginApi(loginForm);
+			console.log(data);
 			setToken(data);
 			setTabsList([]);
 			message.success(t("login.loginSuccess"));

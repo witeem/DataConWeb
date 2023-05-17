@@ -1,6 +1,7 @@
 import { PORT1 } from "@/api/config/servicePort";
 import qs from "qs";
 import { request } from "@/api";
+import { deepLoopFloatBar } from "@/layouts/components/Menu/menumap";
 
 /**
  * @name Menu information module
@@ -15,4 +16,16 @@ export const InsertMenuApi = (params: any) => {
 /** GET /api/GetMenuTree */
 export const GetAllMenuTreeApi = (params?: any) => {
 	return request.getpage<Menu.MenuOptions[]>(PORT1 + `/Menu/GetAllMenuTree`, params);
+};
+
+export const GetMenuData = async () => {
+	try {
+		const { data } = await GetAllMenuTreeApi();
+		if (!data) return [];
+		return deepLoopFloatBar(data);
+	} catch (error) {
+		console.log(error);
+	}
+
+	return [];
 };

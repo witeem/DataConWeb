@@ -18,7 +18,10 @@ export default {
 		cancel: "cancel",
 		del: "delete",
 		read: "read",
-		reset: "reset"
+		reset: "reset",
+		profile: "profile",
+		setrole: "permission",
+		submit: "submit"
 	},
 	tabs: {
 		more: "More",

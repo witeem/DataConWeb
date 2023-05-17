@@ -8,6 +8,7 @@ import { setToken } from "@/redux/modules/global/action";
 import PasswordModal from "./PasswordModal";
 import InfoModal from "./InfoModal";
 import avatar from "@/assets/images/avatar.png";
+import { LogoutApi } from "@/api/modules/login";
 
 const AvatarIcon = (props: any) => {
 	const { setToken } = props;
@@ -27,10 +28,13 @@ const AvatarIcon = (props: any) => {
 			content: "是否确认退出登录？",
 			okText: "确认",
 			cancelText: "取消",
-			onOk: () => {
-				setToken("");
-				message.success("退出登录成功！");
-				navigate("/login");
+			onOk: async () => {
+				const { data } = await LogoutApi();
+				if (data) {
+					setToken("");
+					message.success("退出登录成功！");
+					navigate("/login");
+				}
 			}
 		});
 	};

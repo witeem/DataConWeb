@@ -14,6 +14,7 @@ import type { ProColumns, ActionType } from "@ant-design/pro-table";
 import type { TableListPagination } from "@/views/components/tablelist";
 
 import "./index.less";
+import ProfileForm from "../components/profileform";
 
 /** 获取规则列表 GET /api/rule */
 export async function requestData(
@@ -39,6 +40,7 @@ interface ColumnProps {
 
 const UserList: React.FC = () => {
 	const { t } = useTranslation();
+	const profileRef = useRef<ColumnProps>(null);
 	const updateRef = useRef<ColumnProps>(null);
 	const addRef = useRef<ModalProps>(null);
 	const actionRef = useRef<ActionType>();
@@ -94,6 +96,14 @@ const UserList: React.FC = () => {
 					}}
 				>
 					{t("opt.update")}
+				</a>,
+				<a
+					key="setRole"
+					onClick={() => {
+						ProfileBtn(record);
+					}}
+				>
+					{t("opt.profile")}
 				</a>
 			]
 		}
@@ -107,10 +117,15 @@ const UserList: React.FC = () => {
 		updateRef.current!.ShowModal(params);
 	};
 
+	const ProfileBtn = async (params: TableListItem) => {
+		profileRef.current!.ShowModal(params);
+	};
+
 	return (
 		<div className="card content-box">
 			<Addform innerRef={addRef} />
 			<Updateform innerRef={updateRef} />
+			<ProfileForm innerRef={profileRef} />
 			<PageContainer>
 				<ProTable<TableListItem, TableListPagination>
 					headerTitle={t("userColumn.userlist")}
