@@ -12,7 +12,8 @@ i18n.use(initReactI18next).init({
 			translation: zhCnTrans
 		}
 	},
-	// 选择默认语言，选择内容为上述配置中的 key，即 en/zh
+
+	// Select the default language and select en/ en as the key in the preceding configuration
 	fallbackLng: "en",
 	lng: "en",
 	debug: false,

@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv, ConfigEnv, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import path, { resolve } from "path";
 import { wrapperEnv } from "./src/utils/getEnv";
 import { visualizer } from "rollup-plugin-visualizer";
 import { createHtmlPlugin } from "vite-plugin-html";
@@ -14,12 +14,20 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 	const viteEnv = wrapperEnv(env);
 
 	return {
-		// base: "/",
+		base: "./",
 		// alias config
 		resolve: {
-			alias: {
-				"@": resolve(__dirname, "./src")
-			}
+			alias: [
+				{
+					find: "@",
+					replacement: path.resolve(__dirname, "src")
+				},
+				{
+					find: "src",
+					replacement: path.resolve(__dirname, "src")
+				}
+			],
+			extensions: [".js", ".json", ".ts", ".tsx", ".jsx", ".less"]
 		},
 		// global css
 		css: {
@@ -39,11 +47,11 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 			port: viteEnv.VITE_PORT,
 			open: viteEnv.VITE_OPEN,
 			cors: true,
-			// https: false,
-			// 代理跨域（mock 不需要配置，这里只是个事列）
+			https: false,
+			// Proxy cross-domain (mock doesn't need configuration, it's just a event column)
 			proxy: {
 				"/api": {
-					target: "http://localhost:5185", // easymock
+					target: "http://127.0.0.1:5188", // easymock
 					changeOrigin: true,
 					rewrite: path => path.replace(/^\/api/, "/api")
 				}
@@ -61,12 +69,12 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 			}),
 			// * 使用 svg 图标
 			createSvgIconsPlugin({
-				iconDirs: [resolve(process.cwd(), "src/assets/icons")],
+				iconDirs: [resolve(process.cwd(), "src/assets/icons", "srcassetsimages")],
 				symbolId: "icon-[dir]-[name]"
 			}),
-			// * EsLint 报错信息显示在浏览器界面上
+			// * EsLint displays error messages on the browser interface
 			eslintPlugin(),
-			// * 是否生成包预览
+			// * Whether to generate a package preview
 			viteEnv.VITE_REPORT && visualizer(),
 			// * gzip compress
 			viteEnv.VITE_BUILD_GZIP &&
@@ -79,20 +87,24 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 				})
 		],
 		esbuild: {
+			supported: {
+				"top-level-await": true //browsers can handle top-level-await features
+			},
 			pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : []
 		},
 		// build configure
 		build: {
+			target: "esnext", //browsers can handle the latest ES features
 			outDir: "dist",
-			// esbuild 打包更快，但是不能去除 console.log，去除 console 使用 terser 模式
-			minify: "esbuild",
-			// minify: "terser",
-			// terserOptions: {
-			// 	compress: {
-			// 		drop_console: viteEnv.VITE_DROP_CONSOLE,
-			// 		drop_debugger: true
-			// 	}
-			// },
+			// esbuild Packing is faster, but it does not remove console.log, which uses terser mode
+			// minify: "esbuild",
+			minify: "terser",
+			terserOptions: {
+				compress: {
+					drop_console: viteEnv.VITE_DROP_CONSOLE,
+					drop_debugger: true
+				}
+			},
 			rollupOptions: {
 				output: {
 					// Static resource classification and packaging

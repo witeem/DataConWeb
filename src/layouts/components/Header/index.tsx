@@ -7,6 +7,7 @@ import Language from "./components/Language";
 import Theme from "./components/Theme";
 import Fullscreen from "./components/Fullscreen";
 import "./index.less";
+import { SysTitle } from "@/config/config";
 
 const LayoutHeader = () => {
 	const { Header } = Layout;
@@ -22,7 +23,7 @@ const LayoutHeader = () => {
 				<Language />
 				<Theme />
 				<Fullscreen />
-				<span className="username">Hooks</span>
+				<span className="username">{SysTitle}</span>
 				<AvatarIcon />
 			</div>
 		</Header>

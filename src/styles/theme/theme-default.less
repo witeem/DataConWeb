@@ -1,4 +1,5 @@
 @import "antd/dist/antd.less";
+@import "../cusAnt.less";
 
 /* 自定义 antd 默认样式 */
 @light-bg-color: #ffffff;
@@ -19,15 +20,15 @@ body {
 
 /* login container（先固定样式） */
 .login-container {
-	background-color: #eeeeee !important;
+	background-color: #efefef !important;
 	.login-box {
-		background-color: hsl(0deg 0% 100% / 80%) !important;
+		background-color: hsl(0deg 0% 100% / 70%) !important;
 		.login-form {
 			background-color: transparent !important;
-			box-shadow: 2px 3px 7px rgb(0 0 0 / 20%) !important;
+			box-shadow: 1px 1px 5px rgb(0 0 0 / 15%) !important;
 			.login-logo {
 				.logo-text {
-					color: #475768 !important;
+					color: #9b9595 !important;
 				}
 			}
 			.login-btn {
@@ -68,16 +69,6 @@ body {
 			background-color: @light-bg-color !important;
 			border-color: @light-border-color !important;
 		}
-		.ant-layout-header {
-			height: 55px;
-			padding: 0 40px 0 20px;
-			background-color: @light-bg-color !important;
-			border-color: @light-border-header-color !important;
-			.icon-style,
-			.username {
-				color: @light-text-color !important;
-			}
-		}
 		.footer {
 			a {
 				color: @light-text-color !important;
@@ -106,41 +97,4 @@ body {
 			}
 		}
 	}
-}
-
-/* Select color theme */
-.ant-btn-primary {
-	background: @ant-btn-primary !important;
-	border-color: @ant-btn-primary !important;
-}
-.ant-switch-checked {
-	background-color:@ant-btn-primary !important;
-}
-.ant-menu-item-selected {
-	background-color:@ant-btn-primary !important;
-}
-.ant-btn:hover, :focus {
-	border-color:@ant-btn-primary !important;
-}
-
-/* 修改hover效果 */
-.ant-input:hover {
-	border-color: #bf1d0a;
-	border-right-width: 1px !important;
-}
-
-/*  修改focus效果 */
-.ant-input:focus,
-.ant-input-focused {
-	border-color: #bf1d0a;
-	box-shadow: none;
-}
-.ant-input-affix-wrapper:hover, :focus {
-	border-color:@ant-btn-primary !important;
-}
-.ant-form-item-control:hover, :focus {
-	border-color:@ant-btn-primary !important;
-}
-.ant-form-item-control-input-content:hover, :focus {
-	border-color:@ant-btn-primary !important;
 }

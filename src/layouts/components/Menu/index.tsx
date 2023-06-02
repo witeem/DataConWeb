@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Menu, Spin } from "antd";
+import { Menu, Spin, message } from "antd";
 import { getOpenKeys, handleRouter, searchRoute } from "@/utils/util";
 import { setMenuList } from "@/redux/modules/menu/action";
 import { setAuthRouter } from "@/redux/modules/auth/action";
-import { getMenuList } from "@/api/modules/login";
+import { GetAuthorMenusApi } from "@/api/modules/login";
 import { connect } from "react-redux";
 import type { MenuProps } from "antd";
 import Logo from "./components/Logo";
 import "./index.less";
-import { deepLoopFloat } from "./menumap";
+import { handelMenuList } from "./menu-util";
 import { MenuItem } from "./menudata";
 
 const LayoutMenu = (props: any) => {
@@ -20,6 +20,7 @@ const LayoutMenu = (props: any) => {
 
 	// 刷新页面菜单保持高亮
 	useEffect(() => {
+		getMenuData();
 		setSelectedKeys([pathname]);
 		isCollapse ? null : setOpenKeys(getOpenKeys(pathname));
 	}, [pathname, isCollapse]);
@@ -35,27 +36,26 @@ const LayoutMenu = (props: any) => {
 	// 获取菜单列表并处理成 antd menu 需要的格式
 	const [menuList, setMenuList] = useState<MenuItem[]>([]);
 	const [loading, setLoading] = useState(false);
+
 	const getMenuData = async () => {
 		setLoading(true);
 		try {
-			const { data } = await getMenuList();
+			const { data } = await GetAuthorMenusApi();
 			if (!data) return;
-			setMenuList(deepLoopFloat(data));
-			// Store all the processed breadcrumb navigation bars in redux
-			// setBreadcrumbList(findAllBreadcrumb(data));
-			// 把路由菜单处理成一维数组，存储到 redux 中，做菜单权限判断
+			setMenuList(handelMenuList(data));
 			const dynamicRouter = handleRouter(data);
 			setAuthRouter(dynamicRouter);
+
+			// const dynamicButtons = handleButtons(data);
+			// setAuthButtons(dynamicButtons);
+
 			setMenuListAction(data);
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			message.error(error);
 		} finally {
 			setLoading(false);
 		}
 	};
-	useEffect(() => {
-		getMenuData();
-	}, []);
 
 	// 点击当前菜单跳转页面
 	const navigate = useNavigate();
@@ -70,7 +70,6 @@ const LayoutMenu = (props: any) => {
 			<Spin spinning={loading} tip="Loading...">
 				<Logo></Logo>
 				<Menu
-					theme="dark"
 					mode="inline"
 					triggerSubMenuAction="click"
 					openKeys={openKeys}

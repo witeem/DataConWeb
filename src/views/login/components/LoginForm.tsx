@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { useEffect, useState } from "react";
+import { Button, Form, Input, Space, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Login } from "@/api/interface";
 import { LoginApi } from "@/api/modules/login";
@@ -21,15 +21,14 @@ const LoginForm = (props: any) => {
 	const onFinish = async (loginForm: Login.ReqLoginForm) => {
 		try {
 			setLoading(true);
-			// loginForm.password = md5(loginForm.password);
 			const { data } = await LoginApi(loginForm);
-			console.log(data);
 			setToken(data);
 			setTabsList([]);
+
 			message.success(t("login.loginSuccess"));
 			navigate(HOME_URL);
 		} catch (err: any) {
-			console.log(err.message);
+			message.error(err.msg);
 		} finally {
 			setLoading(false);
 		}
@@ -38,6 +37,8 @@ const LoginForm = (props: any) => {
 	const onFinishFailed = (errorInfo: any) => {
 		console.log("Failed:", errorInfo);
 	};
+
+	useEffect(() => {}, [loading]);
 
 	return (
 		<Form
@@ -50,24 +51,26 @@ const LoginForm = (props: any) => {
 			size="large"
 			autoComplete="off"
 		>
-			<Form.Item name="userId" rules={[{ required: true, message: t("input.userId") }]}>
+			<Form.Item name="userId" rules={[{ required: true, message: t("login.userId") }]}>
 				<Input placeholder="user Id：admin / user" prefix={<UserOutlined />} />
 			</Form.Item>
-			<Form.Item name="password" rules={[{ required: true, message: t("input.pwd") }]}>
+			<Form.Item name="password" rules={[{ required: true, message: t("login.pwd") }]}>
 				<Input.Password autoComplete="new-password" placeholder="password：123456" prefix={<LockOutlined />} />
 			</Form.Item>
 			<Form.Item className="login-btn">
-				<Button
-					onClick={() => {
-						form.resetFields();
-					}}
-					icon={<CloseCircleOutlined />}
-				>
-					{t("login.reset")}
-				</Button>
-				<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined />}>
-					{t("login.confirm")}
-				</Button>
+				<Space>
+					<Button
+						onClick={() => {
+							form.resetFields();
+						}}
+						icon={<CloseCircleOutlined />}
+					>
+						{t("login.reset")}
+					</Button>
+					<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined />}>
+						{t("login.confirm")}
+					</Button>
+				</Space>
 			</Form.Item>
 		</Form>
 	);

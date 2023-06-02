@@ -39,12 +39,10 @@ export const UpdatePwdApi = (params: Login.ReqLoginForm) => {
 	return request.post<boolean>(PORT1 + `/Account/UpdatePwd`, qs.stringify(params));
 };
 
-// *
-export const getAuthorButtons = () => {
-	return request.get<Login.ResAuthButtons>(PORT1 + `/auth/buttons`);
+export const GetAuthorMenusApi = (params?: any) => {
+	return request.get<Menu.MenuOptions[]>(PORT1 + `/Roles/GetAuthorMenus`, params);
 };
 
-// *
-export const getMenuList = () => {
-	return request.get<Menu.MenuOptions[]>(PORT1 + `/Roles/GetMenuInfosByRole`);
+export const GeAuthorButtonsApi = (params?: any) => {
+	return request.get<string[]>(PORT1 + `/Roles/GeAuthorButtons`, params);
 };

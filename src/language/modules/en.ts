@@ -1,8 +1,12 @@
+import columnsEn from "./columns-en";
+import formsEn from "./forms.en";
 export default {
 	login: {
 		confirm: "Login",
 		reset: "Reset",
-		loginSuccess: "Login Success"
+		loginSuccess: "Login Success",
+		userId: "Please enter the user Id",
+		pwd: "Please Enter Password"
 	},
 	home: {
 		welcome: "Welcome"
@@ -11,17 +15,19 @@ export default {
 		createMenu: "Create Menu"
 	},
 	opt: {
-		opt: "operation",
-		search: "search",
-		create: "create",
-		update: "update",
-		cancel: "cancel",
-		del: "delete",
-		read: "read",
-		reset: "reset",
-		profile: "profile",
-		setrole: "permission",
-		submit: "submit"
+		opt: "Operation",
+		search: "Search",
+		create: "Create",
+		update: "Update",
+		cancel: "Cancel",
+		del: "Delete",
+		read: "Read",
+		reset: "Reset",
+		profile: "Profile",
+		setrole: "Permission",
+		submit: "Submit",
+		yes: "Yes",
+		no: "No"
 	},
 	tabs: {
 		more: "More",
@@ -32,8 +38,8 @@ export default {
 	header: {
 		componentSize: "Component Size",
 		language: "Language",
-		theme: "theme",
-		themeSetting: "Theme setting",
+		theme: "Theme",
+		themeSetting: "Theme Setting",
 		darkMode: "Dark Mode",
 		lightMode: "Light Mode",
 		fullScreen: "Full Screen",
@@ -42,26 +48,6 @@ export default {
 		changePassword: "Change Password",
 		logout: "Logout"
 	},
-	input: {
-		userId: "Please enter the user Id",
-		pwd: "Please Enter Password"
-	},
-	userColumn: {
-		userlist: "User Table",
-		userId: "user Id",
-		userName: "user Name",
-		emailAdd: "email Address",
-		mallId: "mallId"
-	},
-	userForm: {
-		createUser: "create User",
-		updateUser: "update User"
-	},
-	roleColumn: {
-		rolelist: "Role Table",
-		roleName: "role Name",
-		desc: "description",
-		authScope: "authorityScope",
-		active: "active"
-	}
+	...columnsEn,
+	...formsEn
 };

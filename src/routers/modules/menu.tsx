@@ -4,6 +4,8 @@ import { LayoutIndex } from "@/routers/constant";
 import { RouteObject } from "@/routers/interface";
 
 // menu 模块
+const AddMenu = lazyLoad(React.lazy(() => import("@/views/menu/components/addform")));
+const UpdateMenu = lazyLoad(React.lazy(() => import("@/views/menu/components/updateform")));
 const menuRouter: Array<RouteObject> = [
 	{
 		element: <LayoutIndex />,
@@ -13,11 +15,20 @@ const menuRouter: Array<RouteObject> = [
 		children: [
 			{
 				path: "/menu/addform",
-				element: lazyLoad(React.lazy(() => import("@/views/menu/components/addform"))),
+				element: AddMenu,
 				meta: {
 					requiresAuth: true,
 					title: "新建菜单",
 					key: "addmenu"
+				}
+			},
+			{
+				path: "/menu/updateform",
+				element: UpdateMenu,
+				meta: {
+					requiresAuth: true,
+					title: "编辑菜单",
+					key: "updatemenu"
 				}
 			}
 		]

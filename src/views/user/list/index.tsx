@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useRef, useState } from "react";
-import { Button } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Button, Card } from "antd";
 import type { TableListItem } from "./data";
 import { GetUserPageApi } from "@/api/modules/userinfo";
-import { GetRandomuserParams } from "@/views/interface/index";
-import Addform from "@/views/user/components/addform";
+import { GetPageBaseReq } from "@/views/interface/index";
+import Addform from "../components/addform";
 import Updateform from "../components/updateform";
 import { useTranslation } from "react-i18next";
-import { PageContainer } from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
 import type { ProColumns, ActionType } from "@ant-design/pro-table";
 import type { TableListPagination } from "@/views/components/tablelist";
 
 import "./index.less";
 import ProfileForm from "../components/profileform";
+import useAuthButtons from "@/hooks/useAuthButtons";
+import { current } from "immer";
 
-/** 获取规则列表 GET /api/rule */
+/** 获取列表 GET  */
 export async function requestData(
 	params: {
 		// query
@@ -27,7 +28,7 @@ export async function requestData(
 	},
 	options?: { [key: string]: any }
 ) {
-	return await GetUserPageApi(GetRandomuserParams(params));
+	return await GetUserPageApi(GetPageBaseReq(params));
 }
 
 interface ModalProps {
@@ -40,14 +41,14 @@ interface ColumnProps {
 
 const UserList: React.FC = () => {
 	const { t } = useTranslation();
+	const { BUTTONS } = useAuthButtons();
 	const profileRef = useRef<ColumnProps>(null);
 	const updateRef = useRef<ColumnProps>(null);
 	const addRef = useRef<ModalProps>(null);
 	const actionRef = useRef<ActionType>();
+	const target = useRef<HTMLDivElement>(null);
+	const [tableHeight, setTableHeight] = useState(433); // 表格高度，默认值大约显示10行
 
-	const [userIdvalue, setUserIdvalue] = useState("");
-	const [data, setData] = useState<TableListItem[]>();
-	const [loading, setLoading] = useState(false);
 	const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
 	const [tableParams, setTableParams] = useState<TableListPagination>({
 		current: 1,
@@ -59,7 +60,7 @@ const UserList: React.FC = () => {
 			title: t("userColumn.userId"),
 			width: 120,
 			dataIndex: "userId",
-			key: "keyword",
+			key: "userId",
 			align: "center"
 		},
 		{
@@ -87,25 +88,38 @@ const UserList: React.FC = () => {
 			dataIndex: "option",
 			valueType: "option",
 			fixed: "right",
+			align: "center",
 			width: 120,
-			render: (_, record) => [
-				<a
-					key="updateItem"
-					onClick={() => {
-						UpdateBtn(record);
-					}}
-				>
-					{t("opt.update")}
-				</a>,
-				<a
-					key="setRole"
-					onClick={() => {
-						ProfileBtn(record);
-					}}
-				>
-					{t("opt.profile")}
-				</a>
-			]
+			render: (_, record) => {
+				let opts = [];
+				if (BUTTONS.update) {
+					opts.push(
+						<Button
+							className="ant-btn-primary btn-ripple"
+							key="updateItem"
+							onClick={() => {
+								UpdateBtn(record);
+							}}
+						>
+							{t("opt.update")}
+						</Button>
+					);
+				}
+				if (BUTTONS.profile) {
+					opts.push(
+						<Button
+							className="ant-btn-primary btn-ripple"
+							key="profile"
+							onClick={() => {
+								ProfileBtn(record);
+							}}
+						>
+							{t("opt.profile")}
+						</Button>
+					);
+				}
+				return opts;
+			}
 		}
 	];
 
@@ -121,21 +135,41 @@ const UserList: React.FC = () => {
 		profileRef.current!.ShowModal(params);
 	};
 
+	const LoadTable = async () => {
+		await requestData(GetPageBaseReq(tableParams));
+	};
+
+	useEffect(() => {
+		LoadTable();
+		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
+		const headerHeight = document.getElementsByClassName("ant-layout-header")[0]?.clientHeight || 0;
+		const contentHeight = document.getElementsByClassName("ant-layout-content")[0]?.clientHeight || 0;
+		setTableHeight(contentHeight - headerHeight - searchHeight - 40);
+	}, [tableParams]);
+
+	useEffect(() => {
+		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
+		const headerHeight = document.getElementsByClassName("ant-layout-header")[0]?.clientHeight || 0;
+		const contentHeight = document.getElementsByClassName("ant-layout-content")[0]?.clientHeight || 0;
+		setTableHeight(contentHeight - headerHeight - searchHeight - 40);
+	}, [document.getElementsByClassName("ant-layout-content")[0]?.clientHeight]);
+
 	return (
-		<div className="card content-box">
-			<Addform innerRef={addRef} />
-			<Updateform innerRef={updateRef} />
-			<ProfileForm innerRef={profileRef} />
-			<PageContainer>
-				<ProTable<TableListItem, TableListPagination>
-					headerTitle={t("userColumn.userlist")}
-					bordered={true}
-					params={tableParams}
-					request={requestData}
-					actionRef={actionRef}
-					columns={columns}
-					rowKey={record => record.userId}
-					toolBarRender={() => [
+		<div ref={target}>
+			<Addform innerRef={addRef} loadTable={LoadTable} />
+			<Updateform innerRef={updateRef} loadTable={LoadTable} />
+			<ProfileForm innerRef={profileRef} loadTable={LoadTable} />
+			<ProTable<TableListItem, TableListPagination>
+				tableStyle={{ height: tableHeight }}
+				headerTitle={t("userColumn.userlist")}
+				bordered={true}
+				params={tableParams}
+				request={requestData}
+				actionRef={actionRef}
+				columns={columns}
+				rowKey={record => record.userId}
+				toolBarRender={() =>
+					BUTTONS.add && [
 						<Button
 							type="primary"
 							key="primary"
@@ -145,14 +179,42 @@ const UserList: React.FC = () => {
 						>
 							<PlusOutlined /> {t("opt.create")}
 						</Button>
-					]}
-					rowSelection={{
-						onChange: (_, selectedRows) => {
-							setSelectedRows(selectedRows);
-						}
-					}}
-				/>
-			</PageContainer>
+					]
+				}
+				rowSelection={{
+					onChange: (_, selectedRows) => {
+						setSelectedRows(selectedRows);
+					}
+				}}
+				search={{
+					optionRender: ({ searchText }, { form }) => {
+						return [
+							<Button
+								className="btn-ripple"
+								type="primary"
+								key="reset"
+								icon={<RedoOutlined />}
+								onClick={() => {
+									form?.resetFields();
+								}}
+							>
+								{t("opt.reset")}
+							</Button>,
+							<Button
+								className="btn-ripple"
+								type="primary"
+								key="submit"
+								icon={<SearchOutlined />}
+								onClick={() => {
+									form?.submit();
+								}}
+							>
+								{t("opt.search")}
+							</Button>
+						];
+					}
+				}}
+			/>
 		</div>
 	);
 };

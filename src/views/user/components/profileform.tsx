@@ -1,12 +1,8 @@
-import { Ref, useEffect, useImperativeHandle, useState } from "react";
+import { useEffect, useImperativeHandle, useState } from "react";
 import { TableListItem } from "../list/data";
 import { Col, Modal, Row, Transfer } from "antd";
-import { TransferDirection } from "antd/es/transfer";
 import { useTranslation } from "react-i18next";
-
-interface Props {
-	innerRef: Ref<{ ShowModal: (params: TableListItem) => void }>;
-}
+import { GetRoleList, InsertUserRoleApi } from "@/api/modules/roleinfo";
 
 interface RecordType {
 	key: string;
@@ -15,7 +11,7 @@ interface RecordType {
 	chosen: boolean;
 }
 
-const ProfileForm = (props: Props) => {
+const ProfileForm = (props: any) => {
 	const { t } = useTranslation();
 	const [visible, setVisible] = useState(false);
 	const [itemVal, setItemVal] = useState<TableListItem>();
@@ -32,29 +28,31 @@ const ProfileForm = (props: Props) => {
 		ShowModal
 	}));
 
-	const getMock = () => {
-		const tempTargetKeys = [];
-		const tempMockData = [];
-		for (let i = 0; i < 12; i++) {
-			const data = {
-				key: i.toString(),
-				title: `角色${i + 1}`,
-				description: `description of content${i + 1}`,
-				chosen: i % 2 === 0
-			};
-			if (data.chosen) {
-				tempTargetKeys.push(data.key);
-			}
-			tempMockData.push(data);
+	const getMock = async (params?: any[]) => {
+		const tempMockData: any = [];
+		const roleList = await GetRoleList("");
+		if (roleList) {
+			roleList.forEach(role => {
+				const data = {
+					key: role.id,
+					title: role.roleName,
+					description: role.description,
+					chosen: false
+				};
+				tempMockData.push(data);
+			});
 		}
+
 		setMockData(tempMockData);
-		setTargetKeys(tempTargetKeys);
+		if (params) {
+			setTargetKeys(params);
+		}
 	};
 
 	useEffect(() => {
-		getMock();
-		console.log(itemVal);
-	}, []);
+		setTargetKeys([]);
+		getMock(itemVal?.roles);
+	}, [itemVal?.roles]);
 
 	const filterOption = (inputValue: string, option: RecordType) => option.description.indexOf(inputValue) > -1;
 
@@ -62,8 +60,16 @@ const ProfileForm = (props: Props) => {
 		setTargetKeys(newTargetKeys);
 	};
 
-	const handleSearch = (dir: TransferDirection, value: string) => {
-		console.log("search:", dir, value);
+	const submitBtn = async () => {
+		let paramReq = {
+			userId: itemVal?.id,
+			roleIds: targetKeys
+		};
+		const { data } = await InsertUserRoleApi(paramReq);
+		if (data) {
+			props.loadTable();
+			setVisible(false);
+		}
 	};
 
 	return (
@@ -75,20 +81,18 @@ const ProfileForm = (props: Props) => {
 			onCancel={() => {
 				setVisible(false);
 			}}
-			onOk={() => {
-				setVisible(false);
-			}}
+			onOk={submitBtn}
 			width={800}
 		>
 			<Row>
 				<Col span={16} offset={4}>
 					<Transfer
+						titles={["Source", "Target"]}
 						dataSource={mockData}
 						showSearch
 						filterOption={filterOption}
 						targetKeys={targetKeys}
 						onChange={handleChange}
-						onSearch={handleSearch}
 						render={item => item.title}
 						listStyle={{
 							width: 300,

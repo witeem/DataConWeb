@@ -10,17 +10,19 @@ import LayoutHeader from "./components/Header";
 import LayoutTabs from "./components/Tabs";
 import LayoutFooter from "./components/Footer";
 import "./index.less";
+import { GeAuthorButtonsApi } from "@/api/modules/login";
+import { handleButtons } from "./components/Menu/menu-util";
 
 const LayoutIndex = (props: any) => {
 	const { Sider, Content } = Layout;
-	// const { isCollapse, updateCollapse, setAuthButtons } = props;
-	const { isCollapse, updateCollapse } = props;
+	const { isCollapse, updateCollapse, setAuthButtons } = props;
 
-	// 获取按钮权限列表
-	// const getAuthButtonsList = async () => {
-	// 	const { data } = await getAuthorButtons();
-	// 	setAuthButtons(data);
-	// };
+	const GeAuthorButtons = async () => {
+		const res = await GeAuthorButtonsApi();
+		if (res.success) {
+			setAuthButtons(handleButtons(res.data));
+		}
+	};
 
 	// 监听窗口大小变化
 	const listeningWindow = () => {
@@ -34,6 +36,7 @@ const LayoutIndex = (props: any) => {
 	};
 
 	useEffect(() => {
+		GeAuthorButtons();
 		listeningWindow();
 		// getAuthButtonsList();
 	}, []);

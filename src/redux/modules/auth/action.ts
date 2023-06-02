@@ -1,7 +1,8 @@
+import { Login } from "@/api/interface";
 import * as types from "@/redux/mutation-types";
 
 // * setAuthButtons
-export const setAuthButtons = (authButtons: { [propName: string]: any }) => ({
+export const setAuthButtons = (authButtons: Login.ResAuthButtons) => ({
 	type: types.SET_AUTH_BUTTONS,
 	authButtons
 });

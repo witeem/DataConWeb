@@ -9,13 +9,19 @@ interface TableParams {
 	keyword?: string;
 }
 
-export type TbParams = TableParams;
+interface InsertRoleModuleParams {
+	menuId: number;
+	moduleIds: number[];
+}
 
-export const GetRandomuserParams = (params: any) => ({
+export type TbParams = TableParams;
+export type RoleModuleParams = InsertRoleModuleParams;
+
+export const GetRoleListReq = (params: any) => ({
+	...params,
 	pageSize: params.pagination?.pageSize,
 	pageIndex: params.pagination?.current,
-	keyword: params.keyword,
-	...params
+	isPage: false
 });
 
 export const GetInsertRoleReq = (params: any) => ({
@@ -36,6 +42,28 @@ export const GetUserUpdateReq = (params: any) => ({
 });
 
 export const GetAddmMenuReq = (params: any) => ({
-	title: params.title,
-	...params
+	...params,
+	title: params.title
+});
+
+export const GetAddmModuleReq = (params: any) => ({
+	...params,
+	title: params.title
+});
+
+// moudle
+export const GetPageBaseReq = (params: any) => ({
+	...params,
+	pageSize: params.pagination?.pageSize,
+	pageIndex: params.pagination?.current,
+	isPage: true
+});
+
+//outlet
+export const GetOutletReq = (params: any) => ({
+	...params,
+	leaseStartDate: params.leaseStartDate,
+	leaseEndDate: params.leaseEndDate,
+	allowReimburse: params.allowReimburse === undefined ? false : params.allowReimburse,
+	active: params.active === undefined ? false : params.active
 });

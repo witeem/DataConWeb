@@ -1,0 +1,156 @@
+html {
+	--antd-wave-shadow-color:@ant-btn-primary !important;
+	--scroll-bar:0;
+}
+.container .ant-layout .ant-layout-header {
+	height: 80px;
+	font-size: large;
+	font-weight: 500;
+	color:#ffffff !important;
+	background-color:@ant-btn-primary !important;
+	border-color:@ant-btn-primary !important;
+}
+.container, .ant-layout {
+	color: @txt-primary-color !important;
+	background-color: #ffffff !important;
+	.logo-box {
+		height: 80px;
+		color: @txt-primary-color !important;
+		background-color: #ffffff !important;
+	}
+}
+.logo-text {
+	color: @txt-primary-color !important;
+}
+.ant-menu-title-content {
+	font-size: 1rem !important;
+	font-weight: 400 !important;
+	line-height: 1.25 !important;
+	color: @txt-primary-color !important;
+}
+.ant-menu-submenu-title {
+	padding-left: 12px !important;
+}
+.anticon:hover,
+.ant-menu-item-icon,
+.ant-menu-submenu-active:hover,
+.ant-menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
+	color: @ant-btn-primary !important;
+}
+.ant-menu-item-selected,
+.ant-menu-item:hover {
+	background-color: #d7e7dd !important;
+}
+.ant-menu-inline {
+	.ant-menu-item {
+		padding-left: 33px !important;
+	}
+	.ant-menu-item-selected::after {
+		opacity: 0;
+		transform:scaleY(0) !important;
+	}
+} 
+
+/* Select color theme */
+.ant-transfer-list-header {
+	color: #ffffff !important;
+	background: @ant-btn-primary !important;
+	border-color: @ant-btn-primary !important;
+}
+.ant-checkbox-checked {
+	.ant-checkbox-inner {
+		background: #3e9115 !important;
+		border-color: #3e9115 !important;
+	}
+} 
+.ant-tree-checkbox-checked {
+	.ant-tree-checkbox-inner {
+		background: #3e9115 !important;
+		border-color: #3e9115 !important;
+	}
+}
+.ant-tree-checkbox:hover .ant-tree-checkbox-inner {
+	border-color: #3e9115 !important;
+}
+.ant-checkbox-indeterminate {
+	.ant-checkbox-inner::after {
+		background-color: #3e9115 !important;
+	}
+} 
+.ant-switch-checked {
+	background-color:@ant-btn-primary !important;
+}
+.ant-select-focused,
+.ant-select-open {
+	border-color: @ant-btn-primary !important;
+}
+.border-primary {
+	border-color: @ant-btn-primary !important;
+}
+
+/* 修改hover效果 */
+.ant-select-selector:hover, :focus {
+	border-color: @ant-btn-primary !important;
+	border-right-width: 1px !important;
+}
+
+/*  修改focus效果 */
+.ant-form-item-control:hover, :focus {
+	border-color:@ant-btn-primary !important;
+}
+.ant-form-item-control-input-content:hover, :focus {
+	border-color:@ant-btn-primary !important;
+}
+
+/* Input */
+.ant-input:focus,
+.ant-input-focused {
+	border-color: @ant-btn-primary;
+	box-shadow: none;
+}
+.ant-input-affix-wrapper:hover, :focus {
+	border-color:@ant-btn-primary !important;
+}
+.ant-input:hover {
+	border-color: @ant-btn-primary !important; 
+	border-right-width: 1px !important;
+}
+
+/* Btn */
+.ant-btn-primary {
+	background: @ant-btn-primary !important;
+	border-color: @ant-btn-primary !important;
+	transition: all 0.3s ease !important;
+}
+.ant-btn-primary:hover {
+	background: @ant-btn-hover !important;
+	transform: translateY(-2px) !important;
+}
+.ant-btn:hover, :focus {
+	border-color:@ant-btn-primary !important;
+}
+.btn-del {
+	background:@btn-del-bgcolor !important;
+	border-color: @btn-del-bgcolor !important;
+}
+.btn-del:hover {
+	background:#a91212 !important;
+	border-color: #a91212 !important;
+}
+
+/* ant-space-item */
+.sw-text {
+	padding-top: 5px;
+	line-height: 1.5715 !important;
+}
+.ant-pagination-item-active {
+	background-color: @ant-btn-primary !important;
+	border-color: @ant-btn-primary !important;
+}
+.ant-pagination-item-active a {
+	color: @txt-white-color !important;
+}
+:where(.css-dev-only-do-not-override-1grfovs).ant-pro-query-filter-collapse-button {
+	color: @txt-primary-color !important;
+}
+

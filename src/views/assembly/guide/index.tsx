@@ -16,7 +16,6 @@ const Guide = () => {
 	const guide = () => {
 		driver.defineSteps(steps);
 		driver.start();
-		console.log(driver, "driver");
 	};
 	return (
 		<div className="card content-box">

@@ -1,5 +1,4 @@
-import { Navigate, useRoutes } from "react-router-dom";
-import { RouteObject } from "@/routers/interface";
+import { Navigate, RouteObject, useRoutes } from "react-router-dom";
 import Login from "@/views/login/index";
 
 // * 导入所有router
@@ -20,12 +19,7 @@ export const rootRouter: RouteObject[] = [
 	},
 	{
 		path: "/login",
-		element: <Login />,
-		meta: {
-			requiresAuth: false,
-			title: "login",
-			key: "login"
-		}
+		element: <Login />
 	},
 	...routerArray,
 	{

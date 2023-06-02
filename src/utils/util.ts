@@ -1,4 +1,5 @@
 import { RouteObject } from "@/routers/interface";
+import moment from "moment";
 
 /**
  * @description 获取localStorage
@@ -91,6 +92,20 @@ export const searchRoute = (path: string, routes: RouteObject[] = []): RouteObje
 };
 
 /**
+ * @description 使用递归处理路由菜单，生成一维数组，做菜单权限判断
+ * @param {Array} menuList 所有菜单列表
+ * @param {Array} newArr 菜单的一维数组
+ * @return array
+ */
+export function handleRouter(routerList: Menu.MenuOptions[], newArr: string[] = []) {
+	routerList.forEach((item: Menu.MenuOptions) => {
+		typeof item === "object" && item.path && newArr.push(item.path);
+		item.children && item.children.length && handleRouter(item.children, newArr);
+	});
+	return newArr;
+}
+
+/**
  * @description 递归当前路由的 所有 关联的路由，生成面包屑导航栏
  * @param {String} path 当前访问地址
  * @param {Array} menuList 菜单列表
@@ -141,20 +156,6 @@ export const findAllBreadcrumb = (menuList: Menu.MenuOptions[]): { [key: string]
 };
 
 /**
- * @description 使用递归处理路由菜单，生成一维数组，做菜单权限判断
- * @param {Array} menuList 所有菜单列表
- * @param {Array} newArr 菜单的一维数组
- * @return array
- */
-export function handleRouter(routerList: Menu.MenuOptions[], newArr: string[] = []) {
-	routerList.forEach((item: Menu.MenuOptions) => {
-		typeof item === "object" && item.path && newArr.push(item.path);
-		item.children && item.children.length && handleRouter(item.children, newArr);
-	});
-	return newArr;
-}
-
-/**
  * @description 判断数据类型
  * @param {Any} val 需要判断类型的数据
  * @return string
@@ -197,3 +198,10 @@ export function randomNum(min: number, max: number): number {
 	let num = Math.floor(Math.random() * (min - max) + max);
 	return num;
 }
+
+/**
+ * 格式化时间
+ */
+export const formatTime = (date: any) => {
+	return date ? moment(date).format("YYYY-MM-DD HH:mm:ss") : "";
+};

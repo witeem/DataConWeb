@@ -1,9 +1,10 @@
 import React from "react";
-import lazyLoad from "@/routers/utils/lazyLoad";
 import { LayoutIndex } from "@/routers/constant";
 import { RouteObject } from "@/routers/interface";
+import lazyLoad from "../utils/lazyLoad";
 
-// menu 模块
+// user 模块
+const UserList = lazyLoad(React.lazy(() => import("@/views/user/list/index")));
 const menuRouter: Array<RouteObject> = [
 	{
 		element: <LayoutIndex />,
@@ -13,7 +14,7 @@ const menuRouter: Array<RouteObject> = [
 		children: [
 			{
 				path: "/user/list",
-				element: lazyLoad(React.lazy(() => import("@/views/user/list/index"))),
+				element: UserList,
 				meta: {
 					requiresAuth: true,
 					title: "用户列表",

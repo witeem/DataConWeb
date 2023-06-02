@@ -1,17 +1,12 @@
-import { Ref, useEffect, useImperativeHandle, useState } from "react";
-import { Tree } from "antd";
+import { useEffect, useImperativeHandle, useState } from "react";
+import { Tree, message } from "antd";
 import type { DataNode, TreeProps } from "antd/es/tree";
-import { deepLoopFloatBar } from "./menumap";
+
 import { GetAllMenuTreeApi } from "@/api/modules/menuinfo";
-
 import "../../index.less";
+import { handelMenuBar } from "./menu-util";
 
-interface Props {
-	innerRef: Ref<{ UpdateMenuTree: () => void }>;
-	onClick: (data: any) => void;
-}
-
-const MenuBar = (props: Props) => {
+const MenuBar = (props: any) => {
 	const [menuList, setMenuList] = useState<DataNode[]>();
 
 	const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
@@ -24,9 +19,9 @@ const MenuBar = (props: Props) => {
 		try {
 			const { data } = await GetAllMenuTreeApi();
 			if (!data) return;
-			setMenuList(deepLoopFloatBar(data));
+			setMenuList(handelMenuBar(data));
 		} catch (error) {
-			console.log(error);
+			message.error("Failed to pull the menu data");
 		}
 	};
 
@@ -43,7 +38,7 @@ const MenuBar = (props: Props) => {
 		UpdateMenuTree
 	}));
 
-	return <Tree className="menu-tree" showLine onSelect={onSelect} treeData={menuList} />;
+	return <Tree className="menu-tree" showIcon showLine onSelect={onSelect} treeData={menuList} />;
 };
 
 export default MenuBar;

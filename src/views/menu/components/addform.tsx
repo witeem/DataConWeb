@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
-import { PageContainer } from "@ant-design/pro-layout";
-import { PlusOutlined, ClearOutlined } from "@ant-design/icons";
+import React, { useEffect, useRef, useState } from "react";
+import { PlusOutlined, RedoOutlined } from "@ant-design/icons";
 import { Card, Form, Input, Switch, Row, Col, Button, Space, message } from "antd";
 import { useTranslation } from "react-i18next";
 import MenuBar from "@/layouts/components/Menu/menubar";
 import { GetAddmMenuReq } from "@/views/interface";
 import { InsertMenuApi } from "@/api/modules/menuinfo";
+import useAuthButtons from "@/hooks/useAuthButtons";
 
 type Props = {
 	key: number;
@@ -18,6 +18,7 @@ interface ModalProps {
 
 const MenuBasicForm: React.FC<Record<string, any>> = () => {
 	const { t } = useTranslation();
+	const { BUTTONS } = useAuthButtons();
 	const [form] = Form.useForm();
 	const [btnLoading, setBtnLoading] = useState(false);
 	const menuBarRef = useRef<ModalProps>(null);
@@ -39,6 +40,8 @@ const MenuBasicForm: React.FC<Record<string, any>> = () => {
 					message.error(res.msg);
 				}
 			}
+		} catch (err: any) {
+			message.error(err.msg);
 		} finally {
 			setBtnLoading(false);
 		}
@@ -53,99 +56,103 @@ const MenuBasicForm: React.FC<Record<string, any>> = () => {
 		form.setFieldValue("parentId", data.key);
 	};
 
+	useEffect(() => {
+		setBtnLoading;
+	}, [setBtnLoading]);
+
 	return (
 		<Card bordered={false} title="Create Menu" className="content-box">
 			<Row>
 				<Col span={18} push={5}>
-					<PageContainer>
-						<Form name="form_in_menu" layout="vertical" form={form} initialValues={{ modifier: "public" }}>
-							<Row>
-								<Col span={11}>
-									<Form.Item label="Title" name="title" rules={[{ required: true, message: "Please enter the title" }]}>
-										<Input />
-									</Form.Item>
-								</Col>
-								<Col span={2}></Col>
-								<Col span={11}>
-									<Form.Item label="Description" name="description">
-										<Input />
-									</Form.Item>
-								</Col>
-							</Row>
-							<Row>
-								<Col span={11}>
-									<Form.Item label="Menu Code" name="code" rules={[{ required: true, message: "Please enter the Menu Code" }]}>
-										<Input />
-									</Form.Item>
-								</Col>
-								<Col span={2}></Col>
-								<Col span={11}>
-									<Form.Item label="Icon" name="Icon">
-										<Input />
-									</Form.Item>
-								</Col>
-							</Row>
-							<Form.Item label="Path" name="path">
-								<Input />
-							</Form.Item>
-							<Form.Item label="Link" name="link">
-								<Input />
-							</Form.Item>
-							<Row>
-								<Col span={11}>
-									<Form.Item label="Sort Order" name="orderSort">
-										<Input />
-									</Form.Item>
-								</Col>
-								<Col span={2}></Col>
-								<Col span={11}></Col>
-							</Row>
-							<Row>
-								<Col span={11}>
-									<Form.Item label="Parent Menu" name="parentTitle">
-										<Input disabled></Input>
-									</Form.Item>
-								</Col>
-								<Col span={2}></Col>
-								<Col span={11}>
-									<Form.Item label="" name="parentId">
-										<Input hidden disabled></Input>
-									</Form.Item>
-								</Col>
-							</Row>
-							<Row>
-								<Col span={11}>
-									<Space>
-										Hide：
-										<Form.Item label=" " name="isHide">
-											<Switch checkedChildren="Hide" unCheckedChildren="Show" />
-										</Form.Item>
-									</Space>
-								</Col>
-								<Col span={2}></Col>
-								<Col span={11}>
-									<Space>
-										Button：
-										<Form.Item label=" " name="isButton">
-											<Switch checkedChildren="Button" unCheckedChildren="UnButton" />
-										</Form.Item>
-									</Space>
-								</Col>
-							</Row>
-						</Form>
-						<br />
+					<Form name="form_in_menu" layout="vertical" form={form} initialValues={{ modifier: "public" }}>
 						<Row>
-							<Col span={24} offset={9}>
+							<Col span={11}>
+								<Form.Item label="Title" name="title" rules={[{ required: true, message: "Please enter the title" }]}>
+									<Input />
+								</Form.Item>
+							</Col>
+							<Col span={2}></Col>
+							<Col span={11}>
+								<Form.Item label="Description" name="description">
+									<Input />
+								</Form.Item>
+							</Col>
+						</Row>
+						<Row>
+							<Col span={11}>
+								<Form.Item label="Menu Meta" name="meta" rules={[{ required: true, message: "Please enter the Menu Meta" }]}>
+									<Input />
+								</Form.Item>
+							</Col>
+							<Col span={2}></Col>
+							<Col span={11}>
+								<Form.Item label="Icon" name="icon">
+									<Input />
+								</Form.Item>
+							</Col>
+						</Row>
+						<Form.Item label="Path" name="path">
+							<Input />
+						</Form.Item>
+						<Form.Item label="Link" name="link">
+							<Input />
+						</Form.Item>
+						<Row>
+							<Col span={11}>
+								<Form.Item label="Sort Order" name="orderSort">
+									<Input />
+								</Form.Item>
+							</Col>
+							<Col span={2}></Col>
+							<Col span={11}></Col>
+						</Row>
+						<Row>
+							<Col span={11}>
+								<Form.Item label="Parent Menu" name="parentTitle">
+									<Input disabled></Input>
+								</Form.Item>
+							</Col>
+							<Col span={2}></Col>
+							<Col span={11}>
+								<Form.Item label="" name="parentId">
+									<Input hidden disabled></Input>
+								</Form.Item>
+							</Col>
+						</Row>
+						<Row>
+							<Col span={11}>
 								<Space>
-									<Button
-										type="primary"
-										key="re"
-										onClick={() => {
-											ResetBtn();
-										}}
-									>
-										<ClearOutlined /> {t("opt.reset")}
-									</Button>
+									<div className="sw-text">Hide：</div>
+									<Form.Item label=" " name="isHide" valuePropName="checked">
+										<Switch checkedChildren={t("opt.yes")} unCheckedChildren={t("opt.no")} />
+									</Form.Item>
+								</Space>
+							</Col>
+							<Col span={2}></Col>
+							<Col span={11}>
+								<Space>
+									<div className="sw-text">Button：</div>
+									<Form.Item label=" " name="isButton" valuePropName="checked">
+										<Switch checkedChildren={t("opt.yes")} unCheckedChildren={t("opt.no")} />
+									</Form.Item>
+								</Space>
+							</Col>
+						</Row>
+					</Form>
+					<br />
+					<Row>
+						<Col span={24} offset={9}>
+							<Space>
+								<Button
+									type="primary"
+									key="re"
+									onClick={() => {
+										ResetBtn();
+									}}
+								>
+									<RedoOutlined /> {t("opt.reset")}
+								</Button>
+								{BUTTONS.add && (
 									<Button
 										type="primary"
 										key="submit"
@@ -156,12 +163,12 @@ const MenuBasicForm: React.FC<Record<string, any>> = () => {
 									>
 										<PlusOutlined /> {t("opt.create")}
 									</Button>
-								</Space>
-							</Col>
-						</Row>
-					</PageContainer>
+								)}
+							</Space>
+						</Col>
+					</Row>
 				</Col>
-				<Col span={4} pull={18}>
+				<Col span={4} pull={18} className="right-border-sider">
 					<MenuBar onClick={handleClick} innerRef={menuBarRef} />
 				</Col>
 			</Row>

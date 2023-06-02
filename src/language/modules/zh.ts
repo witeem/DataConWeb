@@ -1,8 +1,12 @@
+import columnsZh from "./columns-zh";
+import formsZh from "./forms-zh";
 export default {
 	login: {
 		confirm: "登录",
 		reset: "重置",
-		loginSuccess: "登录成功"
+		loginSuccess: "登录成功",
+		userId: "请输入用户Id",
+		pwd: "请输入密码"
 	},
 	home: {
 		welcome: "欢迎使用"
@@ -21,7 +25,9 @@ export default {
 		reset: "重置",
 		profile: "角色配置",
 		setrole: "权限配置",
-		submit: "提交"
+		submit: "提交",
+		yes: "是",
+		no: "否"
 	},
 	tabs: {
 		more: "更多",
@@ -42,26 +48,6 @@ export default {
 		changePassword: "修改密码",
 		logout: "退出登录"
 	},
-	input: {
-		userId: "请输入用户Id",
-		pwd: "请输入密码"
-	},
-	userColumn: {
-		userlist: "用户列表",
-		userId: "用户ID",
-		userName: "用户名",
-		emailAdd: "邮箱地址",
-		mallId: "所属商场"
-	},
-	userForm: {
-		createUser: "创建用户",
-		updateUser: "更改用户"
-	},
-	roleColumn: {
-		rolelist: "角色列表",
-		roleName: "角色名称",
-		desc: "简介",
-		authScope: "角色等级",
-		active: "角色状态"
-	}
+	...columnsZh,
+	...formsZh
 };
