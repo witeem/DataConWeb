@@ -5,15 +5,10 @@ import "./index.less";
 import { SysTitle } from "@/config/config";
 import { setToken } from "@/redux/modules/global/action";
 import { store } from "@/redux";
-import { useEffect, useState } from "react";
 
 const Login = () => {
 	store.dispatch(setToken(""));
-	const [loading, setLoading] = useState<boolean>(false);
 
-	useEffect(() => {
-		setLoading(false);
-	}, [loading]);
 	return (
 		<div className="login-container">
 			<SwitchDark />

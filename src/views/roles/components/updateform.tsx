@@ -12,17 +12,17 @@ const UpdateForm = (props: any) => {
 	const [form] = Form.useForm();
 	const [visible, setVisible] = useState(false);
 
-	const ShowModal = (params: TableListItem) => {
+	const showModal = (params: TableListItem) => {
 		setVisible(true);
 		form.setFieldsValue(params);
 	};
 
 	// 将子组件中需要调用的方法绑定到 ref
 	useImperativeHandle(props.innerRef, () => ({
-		ShowModal
+		showModal
 	}));
 
-	const UpdateBtn = async () => {
+	const updateBtn = async () => {
 		try {
 			NProgress.start();
 			let userReq = {};
@@ -41,7 +41,7 @@ const UpdateForm = (props: any) => {
 				}
 			}
 		} catch (err: any) {
-			message.error(err.msg);
+			message.error(err.message);
 		} finally {
 			NProgress.done();
 		}
@@ -50,13 +50,13 @@ const UpdateForm = (props: any) => {
 	return (
 		<Modal
 			title={t("userForm.updateUser")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.update")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {
 				setVisible(false);
 			}}
-			onOk={UpdateBtn}
+			onOk={updateBtn}
 		>
 			<Form name="form_in_modal" layout="vertical" form={form} initialValues={{ modifier: "public" }}>
 				<Form.Item label="" name="id" hidden>

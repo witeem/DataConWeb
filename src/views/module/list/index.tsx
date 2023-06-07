@@ -11,20 +11,7 @@ import Updateform from "../components/updateform";
 import { GetPageBaseReq } from "@/views/interface";
 import { GetModulePageApi } from "@/api/modules/module";
 import MenuBar from "@/layouts/components/Menu/menubar";
-
-/** 获取列表 GET  */
-export async function requestData(
-	params: {
-		// query
-		/** 当前的页码 */
-		current?: number;
-		/** 页面的容量 */
-		pageSize?: number;
-	},
-	options?: { [key: string]: any }
-) {
-	return await GetModulePageApi(GetPageBaseReq(params));
-}
+import { features } from "process";
 
 type MenuBarProps = {
 	key: number;
@@ -50,7 +37,8 @@ const ModuleList: React.FC = () => {
 	const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
 	const [tableParams, setTableParams] = useState<ModulePagePagination>({
 		current: 1,
-		pageSize: 20,
+		pageSize: 10,
+		total: 0,
 		menuId: 0
 	});
 
@@ -108,16 +96,27 @@ const ModuleList: React.FC = () => {
 		}
 	];
 
-	const CreateBtn = async () => {
+	const createBtn = async () => {
 		addRef.current!.ShowModal({ menuId: selectedMenu?.key, menuTitle: selectedMenu?.title });
 	};
 
-	const UpdateBtn = async (params: TableListItem) => {
+	const updateBtn = async (params: TableListItem) => {
 		updateRef.current!.ShowModal({ ...params, menuTitle: selectedMenu?.title });
 	};
 
-	const LoadTable = async () => {
-		await requestData(GetPageBaseReq(tableParams));
+	const loadTable = async () => {
+		actionRef.current!.reload();
+	};
+
+	const fetchData = async (params: any) => {
+		params = { ...params, ...tableParams };
+		params.pageSize = tableParams.pageSize || 10;
+		let res = await GetModulePageApi(GetPageBaseReq(params));
+		if (res.success) {
+			return res;
+		}
+
+		return [];
 	};
 
 	const handleClick = async (data: MenuBarProps) => {
@@ -126,22 +125,33 @@ const ModuleList: React.FC = () => {
 	};
 
 	useEffect(() => {
-		LoadTable();
-	}, [tableParams]);
+		loadTable();
+	}, [JSON.stringify(tableParams)]);
 
 	return (
 		<Card bordered={false} title="Module List">
 			<Row>
 				<Col span={18} push={5}>
-					<Addform innerRef={addRef} loadTable={LoadTable} />
-					<Updateform innerRef={updateRef} loadTable={LoadTable} />
+					<Addform innerRef={addRef} loadTable={loadTable} />
+					<Updateform innerRef={updateRef} loadTable={loadTable} />
 					<ProTable<TableListItem, TableListPagination>
 						bordered={true}
 						params={tableParams}
-						request={requestData}
+						request={fetchData}
 						actionRef={actionRef}
 						columns={columns}
 						rowKey={record => record.id}
+						pagination={{
+							showQuickJumper: true,
+							showSizeChanger: true,
+							defaultPageSize: tableParams.pageSize,
+							onShowSizeChange: (page, pageSize) => {
+								setTableParams({ ...tableParams, current: page, pageSize });
+							},
+							onChange: (page, pageSize) => {
+								setTableParams({ ...tableParams, current: page, pageSize });
+							}
+						}}
 						rowSelection={{
 							onChange: (_, selectedRows) => {
 								setSelectedRows(selectedRows);

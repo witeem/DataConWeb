@@ -54,8 +54,8 @@ export const GetAddmModuleReq = (params: any) => ({
 // moudle
 export const GetPageBaseReq = (params: any) => ({
 	...params,
-	pageSize: params.pagination?.pageSize,
-	pageIndex: params.pagination?.current,
+	pageSize: params.pageSize,
+	pageIndex: params.current,
 	isPage: true
 });
 

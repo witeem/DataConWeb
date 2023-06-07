@@ -48,7 +48,7 @@ const AddForm = (props: any) => {
 	return (
 		<Modal
 			title={t("userForm.createUser")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.create")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {

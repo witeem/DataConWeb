@@ -16,7 +16,7 @@ export interface PageResult {
 	code: number;
 	msg: string;
 	success: boolean;
-	pageIndex: number;
+	current: number;
 	pageSize: number;
 	pageTotal: number;
 	total: number;
@@ -24,6 +24,7 @@ export interface PageResult {
 
 // * 请求响应参数(包含data)
 export interface ResultData<T = any> extends Result {
+	title: string;
 	data: T;
 }
 

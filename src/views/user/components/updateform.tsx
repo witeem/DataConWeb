@@ -3,7 +3,7 @@ import { Modal, Form, Input, Switch, Row, Col, message, Space } from "antd";
 import type { TableListItem } from "../list/data";
 import { useTranslation } from "react-i18next";
 import NProgress from "@/config/nprogress";
-import { UpdateUserApi } from "@/api/modules/userinfo";
+import { updateUserApi } from "@/api/modules/userinfo";
 import { GetUserUpdateReq } from "@/views/interface";
 
 const UpdateForm = (props: any) => {
@@ -11,17 +11,17 @@ const UpdateForm = (props: any) => {
 	const [form] = Form.useForm();
 	const [visible, setVisible] = useState(false);
 
-	const ShowModal = (params: TableListItem) => {
+	const showModal = (params: TableListItem) => {
 		setVisible(true);
 		form.setFieldsValue(params);
 	};
 
 	// 将子组件中需要调用的方法绑定到 ref
 	useImperativeHandle(props.innerRef, () => ({
-		ShowModal
+		showModal
 	}));
 
-	const UpdateBtn = async () => {
+	const updateBtn = async () => {
 		try {
 			NProgress.start();
 			let roleReq = {};
@@ -29,7 +29,7 @@ const UpdateForm = (props: any) => {
 				roleReq = values;
 			});
 			if (roleReq) {
-				let res = await UpdateUserApi(GetUserUpdateReq(roleReq));
+				let res = await updateUserApi(GetUserUpdateReq(roleReq));
 				if (res.success) {
 					form.resetFields();
 					message.success("Create Success");
@@ -40,7 +40,7 @@ const UpdateForm = (props: any) => {
 				}
 			}
 		} catch (err: any) {
-			message.error(err.msg);
+			message.error(err.message);
 		} finally {
 			NProgress.done();
 		}
@@ -49,13 +49,13 @@ const UpdateForm = (props: any) => {
 	return (
 		<Modal
 			title={t("userForm.updateUser")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.update")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {
 				setVisible(false);
 			}}
-			onOk={UpdateBtn}
+			onOk={updateBtn}
 		>
 			<Form name="form_in_modal" layout="vertical" form={form} initialValues={{ modifier: "public" }}>
 				<Form.Item label="" name="id" hidden>

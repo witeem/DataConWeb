@@ -8,16 +8,16 @@ const AddForm = (props: any) => {
 	const { t } = useTranslation();
 	const [form] = Form.useForm();
 	const [visible, setVisible] = useState(false);
-	const ShowModal = () => {
+	const showModal = () => {
 		setVisible(true);
 	};
 
 	// 将子组件中需要调用的方法绑定到 ref
 	useImperativeHandle(props.innerRef, () => ({
-		ShowModal
+		showModal
 	}));
 
-	const CreateBtn = async () => {
+	const createBtn = async () => {
 		try {
 			let roleReq = {};
 			await form.validateFields().then(values => {
@@ -35,20 +35,20 @@ const AddForm = (props: any) => {
 				}
 			}
 		} catch (err: any) {
-			message.error(err.msg);
+			message.error(err.message);
 		}
 	};
 
 	return (
 		<Modal
 			title={t("userForm.createUser")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.create")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {
 				setVisible(false);
 			}}
-			onOk={CreateBtn}
+			onOk={createBtn}
 		>
 			<Form name="form_in_modal" layout="vertical" form={form} initialValues={{ modifier: "public" }}>
 				<Form.Item label="Role Name" name="roleName" rules={[{ required: true, message: "Please enter the role Name" }]}>

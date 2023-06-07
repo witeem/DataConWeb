@@ -48,7 +48,7 @@ const UpdateForm = (props: any) => {
 	return (
 		<Modal
 			title={t("userForm.updateUser")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.update")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {

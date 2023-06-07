@@ -8,27 +8,27 @@ const SetRoleDrawer = (props: any) => {
 	const { t } = useTranslation();
 	const [open, setOpen] = useState(false);
 	const [selectedRole, setSelectedRole] = useState<TableListItem>();
-	const ShowModal = (params: TableListItem) => {
+	const showModal = (params: TableListItem) => {
 		setOpen(true);
 		setSelectedRole(params);
 	};
 
 	useImperativeHandle(props.innerRef, () => ({
-		ShowModal
+		showModal
 	}));
 
 	const onClose = () => {
 		setOpen(false);
 	};
 
-	const LoadTable = () => {
+	const loadTable = () => {
 		setOpen(false);
 		props.loadTable();
 	};
 
 	return (
 		<Drawer title={t("opt.setrole")} placement="right" width={500} onClose={onClose} open={open}>
-			<SetRoleForm selectedRole={selectedRole} loadTable={LoadTable} />
+			<SetRoleForm selectedRole={selectedRole} loadTable={loadTable} />
 		</Drawer>
 	);
 };

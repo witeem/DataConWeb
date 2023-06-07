@@ -18,14 +18,14 @@ const ProfileForm = (props: any) => {
 	const [mockData, setMockData] = useState<RecordType[]>([]);
 	const [targetKeys, setTargetKeys] = useState<string[]>([]);
 
-	const ShowModal = (params: TableListItem) => {
+	const showModal = (params: TableListItem) => {
 		setVisible(true);
 		setItemVal(params);
 	};
 
 	// 将子组件中需要调用的方法绑定到 ref
 	useImperativeHandle(props.innerRef, () => ({
-		ShowModal
+		showModal
 	}));
 
 	const getMock = async (params?: any[]) => {
@@ -75,7 +75,7 @@ const ProfileForm = (props: any) => {
 	return (
 		<Modal
 			title={t("opt.profile")}
-			visible={visible}
+			open={visible}
 			okText={t("opt.submit")}
 			cancelText={t("opt.cancel")}
 			onCancel={() => {

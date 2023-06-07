@@ -4,7 +4,7 @@ import { LayoutIndex } from "@/routers/constant";
 import { RouteObject } from "@/routers/interface";
 
 // menu 模块
-const AddMenu = lazyLoad(React.lazy(() => import("@/views/menu/components/addform")));
+const AddMenu = lazyLoad(React.lazy(() => import("@/views/menu/addindex")));
 const UpdateMenu = lazyLoad(React.lazy(() => import("@/views/menu/components/updateform")));
 const menuRouter: Array<RouteObject> = [
 	{

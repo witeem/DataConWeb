@@ -15,3 +15,10 @@ export type TableListItem = {
 	leaseStartDate: string;
 	leaseEndDate: string;
 };
+
+export type CategoryListItem = {
+	id: number;
+	category: string;
+	active: boolean;
+	mallId: string;
+};

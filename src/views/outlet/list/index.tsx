@@ -31,14 +31,14 @@ export async function requestData(
 }
 
 interface ModalProps {
-	ShowModal: () => void;
+	showModal: () => void;
 }
 
 interface ColumnProps {
-	ShowModal: (params: TableListItem) => void;
+	showModal: (params: TableListItem) => void;
 }
 
-const UserList: React.FC = () => {
+const OutletList: React.FC = () => {
 	const { t } = useTranslation();
 	const { BUTTONS } = useAuthButtons();
 	const updateRef = useRef<ColumnProps>(null);
@@ -46,11 +46,10 @@ const UserList: React.FC = () => {
 	const actionRef = useRef<ActionType>();
 	const target = useRef<HTMLDivElement>(null);
 	const [tableHeight, setTableHeight] = useState(433); // 表格高度，默认值大约显示10行
-
-	const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
 	const [tableParams, setTableParams] = useState<TableListPagination>({
 		current: 1,
-		pageSize: 20
+		pageSize: 20,
+		total: 0
 	});
 
 	const columns: ProColumns<TableListItem>[] = [
@@ -80,6 +79,13 @@ const UserList: React.FC = () => {
 			title: t("outletColumn.outletNumber"),
 			dataIndex: "outletNumber",
 			key: "outletNumber",
+			align: "center"
+		},
+		{
+			title: t("outletColumn.mallId"),
+			dataIndex: "mallId",
+			key: "mallId",
+			search: false,
 			align: "center"
 		},
 		{
@@ -143,7 +149,7 @@ const UserList: React.FC = () => {
 							className="ant-btn-primary btn-ripple"
 							key="updateItem"
 							onClick={() => {
-								UpdateBtn(record);
+								updateBtn(record);
 							}}
 						>
 							{t("opt.update")}
@@ -155,24 +161,20 @@ const UserList: React.FC = () => {
 		}
 	];
 
-	const CreateBtn = async () => {
-		addRef.current!.ShowModal();
+	const createBtn = async () => {
+		addRef.current!.showModal();
 	};
 
-	const UpdateBtn = async (params: TableListItem) => {
-		updateRef.current!.ShowModal(params);
+	const updateBtn = async (params: TableListItem) => {
+		updateRef.current!.showModal(params);
 	};
 
-	const LoadTable = async () => {
-		await requestData(GetPageBaseReq(tableParams));
+	const loadTable = async () => {
+		actionRef.current!.reload();
 	};
 
 	useEffect(() => {
-		LoadTable();
-		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
-		const headerHeight = document.getElementsByClassName("ant-layout-header")[0]?.clientHeight || 0;
-		const contentHeight = document.getElementsByClassName("ant-layout-content")[0]?.clientHeight || 0;
-		setTableHeight(contentHeight - headerHeight - searchHeight - 40);
+		loadTable();
 	}, [tableParams]);
 
 	useEffect(() => {
@@ -184,8 +186,8 @@ const UserList: React.FC = () => {
 
 	return (
 		<div ref={target}>
-			<Addform innerRef={addRef} loadTable={LoadTable} />
-			<Updateform innerRef={updateRef} loadTable={LoadTable} />
+			<Addform innerRef={addRef} loadTable={loadTable} />
+			<Updateform innerRef={updateRef} loadTable={loadTable} />
 			<ProTable<TableListItem, TableListPagination>
 				tableStyle={{ height: tableHeight }}
 				scroll={{ x: "calc(800px + 50%)" }}
@@ -202,7 +204,7 @@ const UserList: React.FC = () => {
 							type="primary"
 							key="primary"
 							onClick={() => {
-								CreateBtn();
+								createBtn();
 							}}
 						>
 							<PlusOutlined /> {t("opt.create")}
@@ -242,4 +244,4 @@ const UserList: React.FC = () => {
 	);
 };
 
-export default UserList;
+export default OutletList;

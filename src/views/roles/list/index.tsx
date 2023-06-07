@@ -17,28 +17,14 @@ import "./index.less";
 import SetRoleDrawer from "../components/setroledrawer";
 import useAuthButtons from "@/hooks/useAuthButtons";
 
-/** 获取规则列表 GET /api/rule */
-export async function requestData(
-	params: {
-		// query
-		/** 当前的页码 */
-		current?: number;
-		/** 页面的容量 */
-		pageSize?: number;
-	},
-	options?: { [key: string]: any }
-) {
-	return await GetRolePageApi(GetPageBaseReq(params));
-}
-
 const RoleList: React.FC = () => {
 	const { t } = useTranslation();
 	interface ModalProps {
-		ShowModal: () => void;
+		showModal: () => void;
 	}
 
 	interface ColumnProps {
-		ShowModal: (params: TableListItem) => void;
+		showModal: (params: TableListItem) => void;
 	}
 
 	// 按钮权限
@@ -53,7 +39,8 @@ const RoleList: React.FC = () => {
 	const [selectedRows, setSelectedRows] = useState<TableListItem[]>([]);
 	const [tableParams, setTableParams] = useState<TableListPagination>({
 		current: 1,
-		pageSize: 20
+		pageSize: 10,
+		total: 0
 	});
 
 	const columns: ProColumns<TableListItem>[] = [
@@ -97,7 +84,7 @@ const RoleList: React.FC = () => {
 							className="ant-btn-primary"
 							key="updateItem"
 							onClick={() => {
-								UpdateBtn(record);
+								updateBtn(record);
 							}}
 						>
 							{t("opt.update")}
@@ -110,7 +97,7 @@ const RoleList: React.FC = () => {
 							className="ant-btn-primary"
 							key="setRoleItem"
 							onClick={() => {
-								SetRoleBtn(record);
+								setRoleBtn(record);
 							}}
 						>
 							{t("opt.setrole")}
@@ -122,25 +109,36 @@ const RoleList: React.FC = () => {
 		}
 	];
 
-	const CreateBtn = async () => {
-		addRef.current!.ShowModal();
+	const createBtn = async () => {
+		addRef.current!.showModal();
 	};
 
-	const UpdateBtn = async (params: TableListItem) => {
-		updateRef.current!.ShowModal(params);
+	const updateBtn = async (params: TableListItem) => {
+		updateRef.current!.showModal(params);
 	};
 
-	const SetRoleBtn = async (params: TableListItem) => {
-		setroleRef.current!.ShowModal(params);
+	const setRoleBtn = async (params: TableListItem) => {
+		setroleRef.current!.showModal(params);
 	};
 
-	const LoadTable = async () => {
-		await requestData(GetPageBaseReq(tableParams));
+	const loadTable = async () => {
+		actionRef.current!.reload();
+	};
+
+	const fetchData = async (params: any) => {
+		params = { ...params, ...tableParams };
+		params.pageSize = tableParams.pageSize || 10;
+		let res = await GetRolePageApi(GetPageBaseReq(params));
+		if (res.success) {
+			return res;
+		}
+
+		return [];
 	};
 
 	useEffect(() => {
-		LoadTable();
-	}, [tableParams]);
+		loadTable();
+	}, [JSON.stringify(tableParams)]);
 
 	useEffect(() => {
 		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
@@ -151,15 +149,15 @@ const RoleList: React.FC = () => {
 
 	return (
 		<div ref={target}>
-			<Addform innerRef={addRef} loadTable={LoadTable} />
-			<Updateform innerRef={updateRef} loadTable={LoadTable} />
-			<SetRoleDrawer innerRef={setroleRef} loadTable={LoadTable} />
+			<Addform innerRef={addRef} loadTable={loadTable} />
+			<Updateform innerRef={updateRef} loadTable={loadTable} />
+			<SetRoleDrawer innerRef={setroleRef} loadTable={loadTable} />
 			<ProTable<TableListItem, TableListPagination>
 				tableStyle={{ height: tableHeight }}
 				headerTitle={t("roleColumn.rolelist")}
 				bordered={true}
 				params={tableParams}
-				request={requestData}
+				request={fetchData}
 				actionRef={actionRef}
 				columns={columns}
 				rowKey={record => record.roleName}
@@ -169,7 +167,7 @@ const RoleList: React.FC = () => {
 							type="primary"
 							key="primary"
 							onClick={() => {
-								CreateBtn();
+								createBtn();
 							}}
 						>
 							<PlusOutlined /> {t("opt.create")}
@@ -179,6 +177,17 @@ const RoleList: React.FC = () => {
 				rowSelection={{
 					onChange: (_, selectedRows) => {
 						setSelectedRows(selectedRows);
+					}
+				}}
+				pagination={{
+					showQuickJumper: true,
+					showSizeChanger: true,
+					defaultPageSize: tableParams.pageSize,
+					onShowSizeChange: (page, pageSize) => {
+						setTableParams({ ...tableParams, current: page, pageSize });
+					},
+					onChange: (page, pageSize) => {
+						setTableParams({ ...tableParams, current: page, pageSize });
 					}
 				}}
 				search={{

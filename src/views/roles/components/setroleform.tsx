@@ -21,7 +21,7 @@ const deepLoopFloat = (menuList: TableListItem[], newArr: SelectListItem[] = [])
 	return newArr;
 };
 
-const GetInsertRoleMenuReq = (roleId: number, params: RoleModuleParams[]) => {
+const getInsertRoleMenuReq = (roleId: number, params: RoleModuleParams[]) => {
 	return {
 		roleId: roleId,
 		menuIds: params
@@ -34,17 +34,17 @@ const SetRoleForm = (props: any) => {
 	const [checkedKeys, setCheckedKeys] = useState<TreeNode>();
 	const [rolelist, setRoleList] = useState<SelectListItem[]>();
 	const [roleVal, setRoleVal] = useState<number>(0);
-	const GetRoleData = async () => {
+	const getRoleData = async () => {
 		const data = await GetRoleList("");
 		setRoleList(deepLoopFloat(data));
 	};
 
 	const handleChange = (value: any) => {
-		InitMenuRoleData(value);
+		initMenuRoleData(value);
 		setRoleVal(value);
 	};
 
-	const InitMenuRoleData = async (roleId: any) => {
+	const initMenuRoleData = async (roleId: any) => {
 		const { data } = await GetMenusByRoleIdApi({ roleId: roleId });
 		if (data) {
 			let initMenus = data.map(item => {
@@ -58,11 +58,11 @@ const SetRoleForm = (props: any) => {
 
 	useEffect(() => {
 		if (!rolelist) {
-			GetRoleData();
+			getRoleData();
 		}
 
 		if (selectedRole) {
-			InitMenuRoleData(selectedRole.id);
+			initMenuRoleData(selectedRole.id);
 			setRoleVal(selectedRole.id);
 		}
 	}, [selectedRole]);
@@ -78,8 +78,8 @@ const SetRoleForm = (props: any) => {
 		});
 
 		if (roleVal > 0) {
-			console.log(GetInsertRoleMenuReq(roleVal, insertReq));
-			const { data } = await InsertRoleMenuModuleApi(GetInsertRoleMenuReq(roleVal, insertReq));
+			console.log(getInsertRoleMenuReq(roleVal, insertReq));
+			const { data } = await InsertRoleMenuModuleApi(getInsertRoleMenuReq(roleVal, insertReq));
 			if (data) {
 				message.success("success");
 				loadTable();

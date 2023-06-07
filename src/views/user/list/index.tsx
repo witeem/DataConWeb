@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Card } from "antd";
 import type { TableListItem } from "./data";
-import { GetUserPageApi } from "@/api/modules/userinfo";
+import { getUserPageApi } from "@/api/modules/userinfo";
 import { GetPageBaseReq } from "@/views/interface/index";
 import Addform from "../components/addform";
 import Updateform from "../components/updateform";
@@ -17,26 +17,12 @@ import ProfileForm from "../components/profileform";
 import useAuthButtons from "@/hooks/useAuthButtons";
 import { current } from "immer";
 
-/** 获取列表 GET  */
-export async function requestData(
-	params: {
-		// query
-		/** 当前的页码 */
-		current?: number;
-		/** 页面的容量 */
-		pageSize?: number;
-	},
-	options?: { [key: string]: any }
-) {
-	return await GetUserPageApi(GetPageBaseReq(params));
-}
-
 interface ModalProps {
-	ShowModal: () => void;
+	showModal: () => void;
 }
 
 interface ColumnProps {
-	ShowModal: (params: TableListItem) => void;
+	showModal: (params: TableListItem) => void;
 }
 
 const UserList: React.FC = () => {
@@ -52,7 +38,8 @@ const UserList: React.FC = () => {
 	const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
 	const [tableParams, setTableParams] = useState<TableListPagination>({
 		current: 1,
-		pageSize: 20
+		pageSize: 10,
+		total: 0
 	});
 
 	const columns: ProColumns<TableListItem>[] = [
@@ -98,7 +85,7 @@ const UserList: React.FC = () => {
 							className="ant-btn-primary btn-ripple"
 							key="updateItem"
 							onClick={() => {
-								UpdateBtn(record);
+								updateBtn(record);
 							}}
 						>
 							{t("opt.update")}
@@ -111,7 +98,7 @@ const UserList: React.FC = () => {
 							className="ant-btn-primary btn-ripple"
 							key="profile"
 							onClick={() => {
-								ProfileBtn(record);
+								profileBtn(record);
 							}}
 						>
 							{t("opt.profile")}
@@ -123,29 +110,36 @@ const UserList: React.FC = () => {
 		}
 	];
 
-	const CreateBtn = async () => {
-		addRef.current!.ShowModal();
+	const createBtn = async () => {
+		addRef.current!.showModal();
 	};
 
-	const UpdateBtn = async (params: TableListItem) => {
-		updateRef.current!.ShowModal(params);
+	const updateBtn = async (params: TableListItem) => {
+		updateRef.current!.showModal(params);
 	};
 
-	const ProfileBtn = async (params: TableListItem) => {
-		profileRef.current!.ShowModal(params);
+	const profileBtn = async (params: TableListItem) => {
+		profileRef.current!.showModal(params);
 	};
 
-	const LoadTable = async () => {
-		await requestData(GetPageBaseReq(tableParams));
+	const loadTable = async () => {
+		actionRef.current!.reload();
+	};
+
+	const fetchData = async (params: any) => {
+		params = { ...params, ...tableParams };
+		params.pageSize = tableParams.pageSize || 10;
+		let res = await getUserPageApi(GetPageBaseReq(params));
+		if (res.success) {
+			return res;
+		}
+
+		return [];
 	};
 
 	useEffect(() => {
-		LoadTable();
-		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
-		const headerHeight = document.getElementsByClassName("ant-layout-header")[0]?.clientHeight || 0;
-		const contentHeight = document.getElementsByClassName("ant-layout-content")[0]?.clientHeight || 0;
-		setTableHeight(contentHeight - headerHeight - searchHeight - 40);
-	}, [tableParams]);
+		loadTable();
+	}, [JSON.stringify(tableParams)]);
 
 	useEffect(() => {
 		const searchHeight = document.getElementsByClassName("ant-pro-table-search")[0]?.clientHeight || 0;
@@ -156,15 +150,15 @@ const UserList: React.FC = () => {
 
 	return (
 		<div ref={target}>
-			<Addform innerRef={addRef} loadTable={LoadTable} />
-			<Updateform innerRef={updateRef} loadTable={LoadTable} />
-			<ProfileForm innerRef={profileRef} loadTable={LoadTable} />
+			<Addform innerRef={addRef} loadTable={loadTable} />
+			<Updateform innerRef={updateRef} loadTable={loadTable} />
+			<ProfileForm innerRef={profileRef} loadTable={loadTable} />
 			<ProTable<TableListItem, TableListPagination>
 				tableStyle={{ height: tableHeight }}
 				headerTitle={t("userColumn.userlist")}
 				bordered={true}
 				params={tableParams}
-				request={requestData}
+				request={fetchData}
 				actionRef={actionRef}
 				columns={columns}
 				rowKey={record => record.userId}
@@ -174,13 +168,24 @@ const UserList: React.FC = () => {
 							type="primary"
 							key="primary"
 							onClick={() => {
-								CreateBtn();
+								createBtn();
 							}}
 						>
 							<PlusOutlined /> {t("opt.create")}
 						</Button>
 					]
 				}
+				pagination={{
+					showQuickJumper: true,
+					showSizeChanger: true,
+					defaultPageSize: tableParams.pageSize,
+					onShowSizeChange: (page, pageSize) => {
+						setTableParams({ ...tableParams, current: page, pageSize });
+					},
+					onChange: (page, pageSize) => {
+						setTableParams({ ...tableParams, current: page, pageSize });
+					}
+				}}
 				rowSelection={{
 					onChange: (_, selectedRows) => {
 						setSelectedRows(selectedRows);
