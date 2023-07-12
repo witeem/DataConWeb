@@ -2,7 +2,6 @@ import { UserInfo } from "@/api/interface/index";
 import { PORT1 } from "@/api/config/servicePort";
 import qs from "qs";
 import { request } from "@/api";
-import type { TableListItem } from "@/views/user/list/data";
 
 /**
  * @name User information module
@@ -22,5 +21,9 @@ export const updateUserApi = (params: any) => {
 
 /**  */
 export const getUserPageApi = (params?: any) => {
-	return request.getpage<TableListItem[]>(PORT1 + `/users/GetUserPage`, params);
+	return request.getpage<any[]>(PORT1 + `/users/GetUserPage`, params);
+};
+
+export const GetUsersByNextRoleTypeApi = (params?: any) => {
+	return request.get<any>(PORT1 + `/users/GetUsersByNextRoleType`, params);
 };

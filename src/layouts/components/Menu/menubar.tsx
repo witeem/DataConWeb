@@ -4,7 +4,7 @@ import type { DataNode, TreeProps } from "antd/es/tree";
 
 import { GetAllMenuTreeApi } from "@/api/modules/menuinfo";
 import "../../index.less";
-import { handelMenuBar } from "./menu-util";
+import { handleMenuBar } from "./menu-util";
 
 const MenuBar = (props: any) => {
 	const [menuList, setMenuList] = useState<DataNode[]>();
@@ -19,7 +19,7 @@ const MenuBar = (props: any) => {
 		try {
 			const { data } = await GetAllMenuTreeApi();
 			if (!data) return;
-			setMenuList(handelMenuBar(data));
+			setMenuList(handleMenuBar(data));
 		} catch (error) {
 			message.error("Failed to pull the menu data");
 		}

@@ -45,6 +45,18 @@ export namespace Login {
 	export interface ResAuthButtons {
 		[propName: string]: any;
 	}
+
+	export interface CurrentUser {
+		userId: string;
+		userName: string;
+		roles: string;
+		roleType: string;
+		mallId: string;
+		departmentId: string;
+		active: string;
+		isReceiveEmail: string;
+		isReceiveEODMail: string;
+	}
 }
 
 // * 用户信息

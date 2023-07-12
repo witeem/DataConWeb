@@ -1,7 +1,7 @@
 import { PORT1 } from "@/api/config/servicePort";
 import qs from "qs";
 import { request } from "@/api";
-import { handelMenuBar } from "@/layouts/components/Menu/menu-util";
+import { handleMenuBar } from "@/layouts/components/Menu/menu-util";
 
 /**
  * @name Menu information module
@@ -31,7 +31,7 @@ export const GetMenuData = async (hideHome?: boolean) => {
 	try {
 		const { data } = await GetAllMenuTreeApi();
 		if (!data) return [];
-		return handelMenuBar(data, hideHome);
+		return handleMenuBar(data, hideHome);
 	} catch (error) {
 		return [];
 	}

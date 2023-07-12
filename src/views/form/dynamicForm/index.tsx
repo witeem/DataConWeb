@@ -25,7 +25,7 @@ const DynamicForm = () => {
 								</Space>
 							))}
 							<Form.Item>
-								<Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+								<Button shape="round" type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
 									Add field
 								</Button>
 							</Form.Item>
@@ -33,7 +33,7 @@ const DynamicForm = () => {
 					)}
 				</Form.List>
 				<Form.Item>
-					<Button type="primary" htmlType="submit">
+					<Button shape="round" type="primary" htmlType="submit">
 						Submit
 					</Button>
 				</Form.Item>

@@ -1,7 +1,7 @@
 import { PORT1 } from "@/api/config/servicePort";
 import qs from "qs";
 import { request } from "@/api";
-import { TableListItem } from "@/views/module/list/data";
+import { TableListItem } from "@/views/apiManage/module/list/data";
 
 /**  */
 export const GetModulePageApi = (params?: any) => {

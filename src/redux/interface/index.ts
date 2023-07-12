@@ -45,3 +45,7 @@ export interface AuthState {
 	};
 	authRouter: string[];
 }
+
+export interface CurrentState {
+	userInfo: any;
+}

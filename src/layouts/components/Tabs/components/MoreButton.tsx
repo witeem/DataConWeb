@@ -38,7 +38,7 @@ const MoreButton = (props: any) => {
 
 	return (
 		<Dropdown menu={{ items }} placement="bottom" arrow={{ pointAtCenter: true }} trigger={["click"]}>
-			<Button className="more-button" type="primary" size="small">
+			<Button shape="round" className="more-button" type="primary" size="small">
 				{t("tabs.more")} <DownOutlined />
 			</Button>
 		</Dropdown>

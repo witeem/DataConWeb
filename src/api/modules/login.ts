@@ -20,6 +20,10 @@ export const LoginApi = (params: Login.ReqLoginForm) => {
 	return request.post<string>(PORT1 + `/Account/Login`, qs.stringify(params));
 };
 
+export const GetUserInfoApi = (params?: any) => {
+	return request.get<any>(PORT1 + `/Account/GetUserInfo`, params);
+};
+
 // * Refreshing token interface
 export const RefreshTokenApi = () => {
 	return request.post<string>(PORT1 + `/Account/RefreshToken`);

@@ -14,7 +14,7 @@ const NotNetwork = () => {
 			title="500"
 			subTitle="Sorry, something went wrong."
 			extra={
-				<Button type="primary" onClick={goHome}>
+				<Button shape="round" type="primary" onClick={goHome}>
 					Back Home
 				</Button>
 			}

@@ -44,7 +44,7 @@ const assemblyRouter: Array<RouteObject> = [
 				meta: {
 					requiresAuth: true,
 					title: "批量导入数据",
-					key: "selectIcon"
+					key: "batchselectIcon"
 				}
 			}
 		]

@@ -16,6 +16,8 @@ export const SET_AUTH_BUTTONS = "SET_AUTH_BUTTONS";
 export const SET_AUTH_ROUTER = "SET_AUTH_ROUTER";
 // 设置 token
 export const SET_TOKEN = "SET_TOKEN";
+// 设置 CurrentUser
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
 // 设置 assemblySize
 export const SET_ASSEMBLY_SIZE = "SET_ASSEMBLY_SIZE";
 // 设置 setLanguage

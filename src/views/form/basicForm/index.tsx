@@ -53,13 +53,13 @@ const BasicForm = () => {
 				</Form.Item>
 				<Form.Item wrapperCol={{ offset: 1 }}>
 					<Space>
-						<Button type="primary" htmlType="submit">
+						<Button shape="round" type="primary" htmlType="submit">
 							Submit
 						</Button>
-						<Button htmlType="button" onClick={onReset}>
+						<Button shape="round" htmlType="button" onClick={onReset}>
 							Reset
 						</Button>
-						<Button type="link" htmlType="button" onClick={onFill}>
+						<Button shape="round" type="link" htmlType="button" onClick={onFill}>
 							Fill form
 						</Button>{" "}
 					</Space>

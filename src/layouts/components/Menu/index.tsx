@@ -9,21 +9,28 @@ import { connect } from "react-redux";
 import type { MenuProps } from "antd";
 import Logo from "./components/Logo";
 import "./index.less";
-import { handelMenuList } from "./menu-util";
+import { handleMenuList } from "./menu-util";
 import { MenuItem } from "./menudata";
 
 const LayoutMenu = (props: any) => {
 	const { pathname } = useLocation();
-	const { isCollapse, setAuthRouter, setMenuList: setMenuListAction } = props;
+	const { isCollapse, setAuthRouter, setMenuList } = props;
 	const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname]);
 	const [openKeys, setOpenKeys] = useState<string[]>([]);
 
+	// 获取菜单列表并处理成 antd menu 需要的格式
+	const [menuDatas, setMenuDatas] = useState<MenuItem[]>([]);
+	const [loading, setLoading] = useState(false);
+
 	// 刷新页面菜单保持高亮
 	useEffect(() => {
-		getMenuData();
 		setSelectedKeys([pathname]);
 		isCollapse ? null : setOpenKeys(getOpenKeys(pathname));
 	}, [pathname, isCollapse]);
+
+	useEffect(() => {
+		getMenuData();
+	}, []);
 
 	// 设置当前展开的 subMenu
 	const onOpenChange = (openKeys: string[]) => {
@@ -33,23 +40,15 @@ const LayoutMenu = (props: any) => {
 		setOpenKeys([latestOpenKey]);
 	};
 
-	// 获取菜单列表并处理成 antd menu 需要的格式
-	const [menuList, setMenuList] = useState<MenuItem[]>([]);
-	const [loading, setLoading] = useState(false);
-
 	const getMenuData = async () => {
 		setLoading(true);
 		try {
 			const { data } = await GetAuthorMenusApi();
 			if (!data) return;
-			setMenuList(handelMenuList(data));
+			setMenuDatas(handleMenuList(data));
 			const dynamicRouter = handleRouter(data);
 			setAuthRouter(dynamicRouter);
-
-			// const dynamicButtons = handleButtons(data);
-			// setAuthButtons(dynamicButtons);
-
-			setMenuListAction(data);
+			setMenuList(data);
 		} catch (error: any) {
 			message.error(error);
 		} finally {
@@ -74,7 +73,7 @@ const LayoutMenu = (props: any) => {
 					triggerSubMenuAction="click"
 					openKeys={openKeys}
 					selectedKeys={selectedKeys}
-					items={menuList}
+					items={menuDatas}
 					onClick={clickMenu}
 					onOpenChange={onOpenChange}
 				></Menu>

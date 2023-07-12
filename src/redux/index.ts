@@ -9,6 +9,7 @@ import menu from "./modules/menu/reducer";
 import tabs from "./modules/tabs/reducer";
 import auth from "./modules/auth/reducer";
 import breadcrumb from "./modules/breadcrumb/reducer";
+import current from "./modules/current/reducer";
 
 // 创建reducer(拆分reducer)
 const reducer = combineReducers({
@@ -16,7 +17,8 @@ const reducer = combineReducers({
 	menu,
 	tabs,
 	auth,
-	breadcrumb
+	breadcrumb,
+	current
 });
 
 // redux 持久化配置

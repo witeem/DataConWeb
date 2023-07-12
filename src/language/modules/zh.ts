@@ -12,7 +12,14 @@ export default {
 		welcome: "欢迎使用"
 	},
 	router: {
-		createMenu: "新建菜单"
+		createMenu: "新建菜单",
+		deleteMenu: "删除菜单",
+		editMenu: "编辑菜单",
+		menuList: "菜单列表",
+		menuDetail: "菜单详情",
+		maintenance: "维护管理",
+		outletList: "门店列表",
+		CategoryList: "交易类别列表"
 	},
 	opt: {
 		opt: "操作",
@@ -20,9 +27,11 @@ export default {
 		create: "新建",
 		update: "更新",
 		cancel: "取消",
+		detail: "详情",
 		del: "删除",
 		read: "查看",
 		reset: "重置",
+		goback: "返回",
 		profile: "角色配置",
 		setrole: "权限配置",
 		submit: "提交",

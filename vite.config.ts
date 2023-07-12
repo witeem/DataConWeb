@@ -14,7 +14,6 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 	const viteEnv = wrapperEnv(env);
 
 	return {
-		base: "./",
 		// alias config
 		resolve: {
 			alias: [
@@ -51,7 +50,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 			// Proxy cross-domain (mock doesn't need configuration, it's just a event column)
 			proxy: {
 				"/api": {
-					target: "http://127.0.0.1:5188", // easymock
+					target: "http://127.0.0.1:5000", // easymock
 					changeOrigin: true,
 					rewrite: path => path.replace(/^\/api/, "/api")
 				}
@@ -69,7 +68,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 			}),
 			// * 使用 svg 图标
 			createSvgIconsPlugin({
-				iconDirs: [resolve(process.cwd(), "src/assets/icons", "srcassetsimages")],
+				iconDirs: [resolve(process.cwd(), "src/assets/icons")],
 				symbolId: "icon-[dir]-[name]"
 			}),
 			// * EsLint displays error messages on the browser interface

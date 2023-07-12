@@ -12,7 +12,14 @@ export default {
 		welcome: "Welcome"
 	},
 	router: {
-		createMenu: "Create Menu"
+		createMenu: "Create Menu",
+		deleteMenu: "Delete Menu",
+		editMenu: "Edit Menu",
+		menuList: "Menu List",
+		menuDetail: "Menu Detail",
+		maintenance: "Maintenance",
+		outletList: "Outlet List",
+		CategoryList: "Trade Category List"
 	},
 	opt: {
 		opt: "Operation",
@@ -20,9 +27,11 @@ export default {
 		create: "Create",
 		update: "Update",
 		cancel: "Cancel",
+		detail: "Detail",
 		del: "Delete",
 		read: "Read",
 		reset: "Reset",
+		goback: "Back",
 		profile: "Profile",
 		setrole: "Permission",
 		submit: "Submit",

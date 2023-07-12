@@ -4,12 +4,12 @@ import { LayoutIndex } from "@/routers/constant";
 import { RouteObject } from "@/routers/interface";
 
 // role 模块
-const RoleList = lazyLoad(React.lazy(() => import("@/views/roles/list/index")));
+const RoleList = lazyLoad(React.lazy(() => import("@/views/apiManage/roles/list/index")));
 const menuRouter: Array<RouteObject> = [
 	{
 		element: <LayoutIndex />,
 		meta: {
-			title: "角色管理"
+			title: "Role Manage"
 		},
 		children: [
 			{
@@ -17,7 +17,7 @@ const menuRouter: Array<RouteObject> = [
 				element: RoleList,
 				meta: {
 					requiresAuth: true,
-					title: "角色列表",
+					title: "Rolelist",
 					key: "rolelist"
 				}
 			}

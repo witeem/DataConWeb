@@ -25,7 +25,7 @@ const Guide = () => {
 				type="warning"
 			/>
 			<div style={{ margin: "15px auto" }}>
-				<Button type="primary" id="antd-button" onClick={guide}>
+				<Button shape="round" type="primary" id="antd-button" onClick={guide}>
 					打开引导页 🤹‍♂️
 				</Button>
 			</div>

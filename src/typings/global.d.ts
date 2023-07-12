@@ -9,6 +9,7 @@ declare namespace Menu {
 		close?: boolean;
 		children?: MenuOptions[];
 		btns?: MenuOptions[];
+		isHide?: boolean;
 	}
 }
 

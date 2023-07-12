@@ -58,12 +58,3 @@ export const GetPageBaseReq = (params: any) => ({
 	pageIndex: params.current,
 	isPage: true
 });
-
-//outlet
-export const GetOutletReq = (params: any) => ({
-	...params,
-	leaseStartDate: params.leaseStartDate,
-	leaseEndDate: params.leaseEndDate,
-	allowReimburse: params.allowReimburse === undefined ? false : params.allowReimburse,
-	active: params.active === undefined ? false : params.active
-});

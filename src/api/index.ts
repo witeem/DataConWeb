@@ -7,9 +7,28 @@ const requestHandler = <T>(
 	method: "get" | "post" | "put" | "delete",
 	url: string,
 	params?: object,
-	config: AxiosRequestConfig = {}
+	config: AxiosRequestConfig = {},
+	dataType?: "json" | "file"
 ): Promise<T> => {
 	let response: Promise<ResultData<T>>;
+	switch (dataType) {
+		case "json":
+			config = {
+				...config,
+				headers: {
+					"Content-Type": "application/json"
+				}
+			};
+			break;
+
+		case "file":
+			config = {
+				...config,
+				headers: {
+					"Content-Type": "multipart/form-data"
+				}
+			};
+	}
 	switch (method) {
 		case "get":
 			response = Instance.get(url, { params: { ...params }, ...config });
@@ -45,6 +64,8 @@ const request = {
 		requestHandler<PageResultData<T>>("get", url, params, config),
 	post: <T>(url: string, params?: object, config?: AxiosRequestConfig) =>
 		requestHandler<ResultData<T>>("post", url, params, config),
+	postfile: <T>(url: string, params?: object, config?: AxiosRequestConfig) =>
+		requestHandler<ResultData<T>>("post", url, params, config, "file"),
 	put: <T>(url: string, params?: object, config?: AxiosRequestConfig) =>
 		requestHandler<ResultData<T>>("put", url, params, config),
 	delete: <T>(url: string, params?: object, config?: AxiosRequestConfig) =>

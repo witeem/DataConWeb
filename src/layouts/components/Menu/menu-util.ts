@@ -42,16 +42,16 @@ const addIcon = (name: string) => {
 };
 
 // The processing background returns the key value of the menu as required by the antd menu
-export const handelMenuBar = (menuList?: Menu.MenuOptions[], hideHome?: boolean, newArr: DataNode[] = []) => {
+export const handleMenuBar = (menuList?: Menu.MenuOptions[], hideHome?: boolean, newArr: DataNode[] = []) => {
 	if (hideHome) {
 		menuList?.shift();
 	}
 	menuList?.forEach((item: Menu.MenuOptions) => {
 		if (item.children?.length) {
-			newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!), handelMenuBar(item.children)));
+			newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!), handleMenuBar(item.children)));
 		} else {
 			if (item.btns?.length) {
-				newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!), handelMenuBarBtn(item.btns)));
+				newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!), handleMenuBarBtn(item.btns)));
 			} else {
 				newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!)));
 			}
@@ -60,7 +60,7 @@ export const handelMenuBar = (menuList?: Menu.MenuOptions[], hideHome?: boolean,
 	return newArr;
 };
 
-export const handelMenuBarBtn = (menuList?: Menu.MenuOptions[], newArr: DataNode[] = []) => {
+export const handleMenuBarBtn = (menuList?: Menu.MenuOptions[], newArr: DataNode[] = []) => {
 	menuList?.forEach((item: Menu.MenuOptions) => {
 		newArr.push(getBarItem(item.title, item.value, addIcon(item.icon!)));
 	});
@@ -68,12 +68,14 @@ export const handelMenuBarBtn = (menuList?: Menu.MenuOptions[], newArr: DataNode
 };
 
 // The processing background returns the key value of the menu as required by the antd menu
-export const handelMenuList = (menuList: Menu.MenuOptions[], newArr: MenuItem[] = []) => {
+export const handleMenuList = (menuList: Menu.MenuOptions[], newArr: MenuItem[] = []) => {
 	menuList.forEach((item: Menu.MenuOptions) => {
-		if (item.children?.length) {
-			newArr.push(getItem(item.title, item.path, addIcon(item.icon!), handelMenuList(item.children)));
-		} else {
-			newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
+		if (item.isHide !== true) {
+			if (item.children?.length) {
+				newArr.push(getItem(item.title, item.path, addIcon(item.icon!), handleMenuList(item.children)));
+			} else {
+				newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
+			}
 		}
 	});
 	return newArr;

@@ -4,12 +4,12 @@ import { RouteObject } from "@/routers/interface";
 import lazyLoad from "../utils/lazyLoad";
 
 // menu 模块
-const ModuleList = lazyLoad(React.lazy(() => import("@/views/module/list/index")));
+const ModuleList = lazyLoad(React.lazy(() => import("@/views/apiManage/module/list/index")));
 const menuRouter: Array<RouteObject> = [
 	{
 		element: <LayoutIndex />,
 		meta: {
-			title: "服务管理"
+			title: "Module Manage"
 		},
 		children: [
 			{
@@ -17,7 +17,7 @@ const menuRouter: Array<RouteObject> = [
 				element: ModuleList,
 				meta: {
 					requiresAuth: true,
-					title: "服务列表",
+					title: "Modulelist",
 					key: "modulelist"
 				}
 			}

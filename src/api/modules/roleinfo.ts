@@ -1,7 +1,6 @@
 import { PORT1 } from "@/api/config/servicePort";
 import qs from "qs";
 import { request } from "@/api";
-import type { MenuRoleItem, TableListItem } from "@/views/roles/list/data";
 import { GetRoleListReq } from "@/views/interface";
 
 /**
@@ -22,11 +21,11 @@ export const UpdateRoleApi = (params: any) => {
 
 /** GET /api/rule */
 export const GetRolePageApi = (params?: any) => {
-	return request.getpage<TableListItem[]>(PORT1 + `/Roles/GetRolePage`, params);
+	return request.getpage<any[]>(PORT1 + `/Roles/GetRolePage`, params);
 };
 
 export const GetMenusByRoleIdApi = (params?: any) => {
-	return request.get<MenuRoleItem[]>(PORT1 + `/Roles/GetMenusByRoleId`, params);
+	return request.get<any[]>(PORT1 + `/Roles/GetMenusByRoleId`, params);
 };
 
 export const InsertUserRoleApi = (params: any) => {
